@@ -12,11 +12,15 @@ import java.util.Objects;
 public class Main extends Application {
 
 	@Override
-	public void start(Stage primaryStage) throws IOException {
-		Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("login.fxml")));
-		primaryStage.setTitle("Hello World");
-		primaryStage.setScene(new Scene(root, 300, 275));
-		primaryStage.show();
+	public void start(Stage stage) throws IOException {
+		Parent layout = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("login.fxml")));
+		stage.setTitle("Login");
+		Scene scene = new Scene(layout, 500, 800);
+		scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("css/modern_dark.css")).toExternalForm());
+		stage.setResizable(false);
+		stage.setScene(scene);
+		stage.centerOnScreen();
+		stage.show();
 	}
 
 	public static void main(String[] args) {
