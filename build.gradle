@@ -2,13 +2,32 @@ group 'cinnamon'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'scala'
 
 sourceCompatibility = 1.8
+
+sourceSets {
+    main {
+        scala {
+            //noinspection GroovyAssignabilityCheck
+            srcDirs = ['src/main/scala']
+        }
+    }
+    test {
+        scala {
+            //noinspection GroovyAssignabilityCheck
+            srcDirs = ['src/test/scala']
+        }
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    
+    compile 'org.scala-lang:scala-library:2.11.8'
+    testCompile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.3.6.jre8-preview'
+    testCompile 'org.scalatest:scalatest_2.11:3.0.0'
+    testCompile 'junit:junit:4.12'
 }
