@@ -1,6 +1,6 @@
 package net.cinnamon.helper
 
-import java.sql.{PreparedStatement, SQLType}
+import java.sql.{CallableStatement, PreparedStatement}
 
 import net.cinnamon.connection.DataBaseConnection
 
@@ -32,7 +32,7 @@ object SequenceHelper {
     }
   }
 
-  def query(data: List[_])(implicit sequence: String, f: mutable.Map[String, AnyRef] => Unit): Unit = {
+  def query(data: List[_])(sequence: String, function: mutable.Map[String, AnyRef] => Unit): Unit = {
     DataBaseConnection.getConnection match {
       case Some(connection) =>
         try {
@@ -48,7 +48,7 @@ object SequenceHelper {
               val value = result.getObject(column)
               map += name -> value
             }
-            f(map)
+            function(map)
           }
           result.close()
           statement.close()
@@ -71,27 +71,37 @@ object SequenceHelper {
     }
   }
 
-  def call(in: Map[String, AnyRef], out: Map[String, SQLType])(implicit call: String, f: mutable.Map[String, AnyRef] => Unit): Unit = {
+  def call(in: Map[String, AnyRef], out: Map[String, Int])(call: String, function: mutable.Map[String, AnyRef] => Unit): Unit = {
+    def setOut(statement: CallableStatement): Unit =
+      out foreach { case (param, kind) => statement.registerOutParameter(param, kind) }
+    def setIn(statement: CallableStatement): Unit =
+      in foreach { case (param, any) => statement.setObject(param, any) }
     DataBaseConnection.getConnection match {
       case Some(connection) =>
         try {
           val statement = connection.prepareCall(call)
-          in foreach {case (param, any) => statement.setObject(param, any)}
-          out foreach { case (param, kind) => statement.registerOutParameter(param, kind) }
+          setOut(statement)
+          setIn(statement)
           statement.execute()
-          val result = statement.getResultSet
-          val metaData = result.getMetaData
-          val columns = metaData.getColumnCount
-          while (result.next) {
-            val map = mutable.Map[String, AnyRef]()
-            for (column <- 1 to columns) {
-              val name = metaData.getColumnName(column)
-              val value = result.getObject(column)
-              map += name -> value
+          if (out.isEmpty) {
+            val result = statement.getResultSet
+            val metaData = result.getMetaData
+            val columns = metaData.getColumnCount
+            while (result.next) {
+              val map = mutable.Map[String, AnyRef]()
+              for (column <- 1 to columns) {
+                val name = metaData.getColumnName(column)
+                val value = result.getObject(column)
+                map += name -> value
+              }
+              function(map)
             }
-            f(map)
+            result.close()
+          } else {
+            val map = mutable.Map[String, AnyRef]()
+            out.keySet foreach (param => map += (param -> statement.getObject(param)))
+            function(map)
           }
-          result.close()
           statement.close()
         } catch {
           case e: Exception => e.printStackTrace()

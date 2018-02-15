@@ -1,15 +1,14 @@
 package net.cinnamon.repository
 
-import net.cinnamon.connection.DataBaseConnection
+import java.sql.Types
+
+import net.cinnamon.helper.SequenceHelper
 
 object LoginImpl {
   def canLogin(user: String, password: String): Boolean = {
-    DataBaseConnection.getConnection match {
-      case None =>
-      case Some(connection) =>
-        connection.close()
-        return true
-    }
+    SequenceHelper.call(Map("email" -> user, "password" -> password), Map("login" -> Types.BOOLEAN))("{call canLogin(?,?,?)}", {
+      map => return map.getOrElse("login", false).asInstanceOf[Boolean]
+    })
     false
   }
 }

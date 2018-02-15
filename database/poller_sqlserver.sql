@@ -90,3 +90,17 @@ CREATE PROCEDURE test_in @some VARCHAR(255)
   AS
   SELECT @some as value;
   GO
+
+CREATE PROCEDURE canLogin @email VARCHAR(45), @password VARCHAR(45), @login BIT OUT
+  AS
+  --Declare variable
+  DECLARE @exists INT;
+  --Check for match
+  SELECT @exists = count(email) FROM Respondiente WHERE email = @email AND password = @password;
+  IF @exists = 1
+      SET @login = 1;
+  ELSE
+    SET @login = 0;
+  --Send confirmation
+  SELECT @login;
+  GO
