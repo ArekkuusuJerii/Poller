@@ -3,7 +3,7 @@ package net.cinnamon.connection
 import java.sql.{Connection, DriverManager}
 import java.util.{Locale, ResourceBundle}
 
-object DBConnection {
+object DataBaseConnection {
 
 	object I18n {
 		def getBundle(implicit locale: Locale): ResourceBundle = ResourceBundle.getBundle("config", locale)
@@ -34,7 +34,7 @@ object DBConnection {
 	object Driver {
 		type Driver = String
 		val MySql: Driver = "jdbc:mysql://%1$s:%2$s/%3$s"
-		val SqlServer: Driver = "jdbc:sqlserver://%1$s:%3$s;databaseName=%2$s;authenticationScheme=JavaKerberos"
+		val SqlServer: Driver = "jdbc:sqlserver://%1$s:%3$s;databaseName=%2$s"
 
 		def find(driver: String): Option[Driver] = driver.toLowerCase match {
 			case "mysql" => Option.apply(MySql)
