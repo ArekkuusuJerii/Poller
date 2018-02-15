@@ -91,16 +91,16 @@ CREATE PROCEDURE test_in @some VARCHAR(255)
   SELECT @some as value;
   GO
 
-CREATE PROCEDURE canLogin @email VARCHAR(45), @password VARCHAR(45), @login BIT OUT
+CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login BIT OUT
   AS
   --Declare variable
-  DECLARE @exists INT;
+  DECLARE @exists INT, @id INT;
   --Check for match
-  SELECT @exists = count(email) FROM Respondiente WHERE email = @email AND password = @password;
+  SELECT @exists = count(id_pk), @id = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk;
   IF @exists = 1
-      SET @login = 1;
+    SET @login = @id;
   ELSE
-    SET @login = 0;
+    SET @login = -1;
   --Send confirmation
   SELECT @login;
   GO

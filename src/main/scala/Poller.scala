@@ -5,7 +5,7 @@ import net.cinnamon.utils.StageLoader
 
 class Poller extends Application {
 	override def start(stage: Stage): Unit = {
-		StageLoader.load(getClass, stage, "views/login.fxml").setTitle("Login")
+		StageLoader.load(getClass, stage, "view/login.fxml").setTitle("Login")
 		stage.setResizable(false)
 		stage.centerOnScreen()
 		stage.show()

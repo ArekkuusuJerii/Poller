@@ -32,7 +32,7 @@
     </Pane>
     <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
         <ImageView fitHeight="200.0" fitWidth="167.0" layoutX="67.0" layoutY="11.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../img/user.png" />
+            <Image url="@../img/poller.png" />
         </ImageView>
     </Pane>
     <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">

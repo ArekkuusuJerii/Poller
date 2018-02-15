@@ -4,11 +4,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import net.cinnamon.helper.StringHelper;
 import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.LoginImpl;
+import net.cinnamon.utils.StageLoader;
 
 public class Login {
+
+    private static String userEmail;
+    private static int userID;
 
     @FXML
     private TextField tf_user;
@@ -30,13 +35,28 @@ public class Login {
 
     @FXML
     public void login(MouseEvent event) {
-        if(LoginImpl.canLogin(tf_user.getText(), pf_password.getText())) {
-            System.out.println("my ass");
-        }
+        LoginImpl.login(tf_user.getText(), pf_password.getText()).ifPresent(key -> {
+            tf_user.getScene().getWindow().hide();
+            Login.userEmail = tf_user.getText();
+            Login.userID = key;
+            //Open Menu
+            Stage stage = StageLoader.load(getClass(), "view/menu.fxml");
+            stage.setTitle("Menu");
+            stage.centerOnScreen();
+            stage.show();
+        });
     }
 
     @FXML
     public void register(MouseEvent event) {
 
+    }
+
+    public static int getUserID() {
+        return userID;
+    }
+
+    public static String getUserEmail() {
+        return userEmail;
     }
 }
