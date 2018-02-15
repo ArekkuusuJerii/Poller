@@ -8,8 +8,6 @@ import scala.collection.mutable
 
 object SequenceHelper {
 
-  var lastKnownKey: Int = _
-
   def update(data: List[_])(implicit sequence: String): Boolean = {
     DataBaseConnection.getConnection match {
       case Some(connection) =>
@@ -18,8 +16,6 @@ object SequenceHelper {
           val statement = connection.prepareStatement(sequence)
           if (sequence.contains("?")) polluteStatement(statement, data)
           success = statement.executeUpdate > 0
-          val keys = statement.getGeneratedKeys
-          lastKnownKey = if (keys.next) keys.getInt(1) else 0
           statement.close()
         } catch {
           case e: Exception => e.printStackTrace()
