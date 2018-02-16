@@ -28,5 +28,5 @@ object StageLoader {
 		stage
 	}
 
-	private def getURL(context: Class[_], resource: String) = Option.apply(context.getClassLoader.getResource(resource))
+  def getURL(context: Class[_], resource: String) = Option.apply(context.getClassLoader.getResource(resource))
 }

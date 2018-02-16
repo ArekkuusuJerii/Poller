@@ -104,3 +104,13 @@ CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login BIT OUT
   --Send confirmation
   SELECT @login;
   GO
+
+CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @email VARCHAR(45), @password VARCHAR(45), @success BIT OUT
+  AS
+  INSERT INTO Respondiente VALUES (@firstName, @secondName, @email, @password)
+  IF @@ROWCOUNT = 1
+      SET @success = 1;
+  ELSE
+    SET @success = 0
+  SELECT @success;
+  GO

@@ -1,14 +1,12 @@
 import javafx.application.Application
 import javafx.stage.Stage
 
-import net.cinnamon.utils.StageLoader
+import net.cinnamon.helper.StageHelper
 
 class Poller extends Application {
 	override def start(stage: Stage): Unit = {
-		StageLoader.load(getClass, stage, "view/login.fxml").setTitle("Login")
-		stage.setResizable(false)
-		stage.centerOnScreen()
-		stage.show()
+		StageHelper.openLogin(stage)
+		stage.toFront()
 	}
 }
 

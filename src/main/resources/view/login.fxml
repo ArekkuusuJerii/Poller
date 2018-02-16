@@ -19,48 +19,48 @@
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="216.0" minHeight="10.0" prefHeight="151.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="269.0" minHeight="10.0" prefHeight="208.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="216.0" minHeight="10.0" prefHeight="191.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="269.0" minHeight="10.0" prefHeight="154.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="118.0" vgrow="SOMETIMES" />
     </rowConstraints>
-    <Pane prefHeight="200.0" prefWidth="200.0">
+    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;">
         <Label layoutX="71.0" layoutY="31.0" text="POLLER">
            <font>
                <Font name="Consolas" size="48.0" />
            </font>
         </Label>
     </Pane>
-    <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.rowIndex="1">
         <ImageView fitHeight="200.0" fitWidth="167.0" layoutX="67.0" layoutY="11.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
             <Image url="@../img/poller.png" />
         </ImageView>
     </Pane>
-    <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-        <Label layoutX="104.0" layoutY="50.0" text="Usuario">
+    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.rowIndex="2">
+        <Label layoutX="104.0" layoutY="7.0" text="Usuario">
            <font>
                <Font name="Consolas" size="24.0" />
            </font>
         </Label>
-        <TextField fx:id="tf_user" accessibleHelp="correo electrónico utilizado para su registro" layoutX="76.0" layoutY="90.0" promptText="my@emailcom" />
-        <Label layoutX="84.0" layoutY="122.0" text="Contraseña">
+        <TextField fx:id="tf_email" accessibleHelp="correo electrónico utilizado para su registro" layoutX="76.0" layoutY="47.0" promptText="my@emailcom" />
+        <Label layoutX="84.0" layoutY="79.0" text="Contraseña">
            <font>
                <Font name="Consolas" size="24.0" />
            </font>
         </Label>
-        <PasswordField fx:id="pf_password" accessibleHelp="contraseña utilizada en su registro" layoutX="76.0" layoutY="162.0" promptText="****" />
+        <PasswordField fx:id="pf_password" accessibleHelp="contraseña utilizada en su registro" layoutX="76.0" layoutY="119.0" promptText="****" />
     </Pane>
-    <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+    <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.rowIndex="3">
         <GridPane.margin>
             <Insets />
         </GridPane.margin>
-        <Button layoutX="69.0" layoutY="7.0" mnemonicParsing="false" onMouseReleased="#login" text="Iniciar Sesión">
+        <Button layoutX="86.0" layoutY="7.0" mnemonicParsing="false" onMouseReleased="#handleLoginEvent" text="Iniciar Sesión">
            <font>
-               <Font name="Consolas" size="18.0" />
+               <Font name="Consolas" size="14.0" />
            </font>
         </Button>
-        <Button layoutX="69.0" layoutY="56.0" mnemonicParsing="false" onMouseReleased="#register"  prefHeight="34.0" prefWidth="163.0" text="Registrarse">
+        <Button layoutX="86.0" layoutY="56.0" mnemonicParsing="false" onMouseReleased="#register" prefHeight="27.0" prefWidth="128.0" text="Registrarse">
            <font>
-               <Font name="Consolas" size="18.0" />
+               <Font name="Consolas" size="14.0" />
            </font>
         </Button>
     </Pane>
