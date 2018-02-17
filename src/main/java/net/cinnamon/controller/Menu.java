@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
 import net.cinnamon.repository.PollImpl;
@@ -15,7 +14,6 @@ public class Menu implements IController {
     private Label lb_user;
     @FXML
     private TextField tf_token;
-    private Stage createWindow;
 
     @Override
     public void initialize() {
@@ -46,23 +44,11 @@ public class Menu implements IController {
 
     @FXML
     public void handleCreateEvent(MouseEvent event) {
-
-        /*FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                new ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
-                new ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showOpenDialog(mainStage);
-        if (selectedFile != null) {
-            mainStage.display(selectedFile);
-        }*/
+         StageHelper.openFile(lb_user.getScene().getWindow());
     }
 
     @Override
     public void hideWindow() {
         lb_user.getScene().getWindow().hide();
-        if(createWindow != null) createWindow.hide();
     }
 }

@@ -10,6 +10,8 @@ import javafx.stage.Stage
 
 package helper {
 
+  import javafx.stage.{Modality, Window}
+
   object AlertHelper {
     def showError(text: String): Alert = {
       val alert: Alert = new Alert(Alert.AlertType.ERROR, text)
@@ -82,6 +84,15 @@ package helper {
       stage.centerOnScreen()
       stage.show()
     }
+
+    def openFile(window: Window): Unit = {
+      val stage = StageLoader.load(getClass, "view/upload.fxml")
+      stage.initModality(Modality.WINDOW_MODAL)
+      stage.initOwner(window)
+      stage.setTitle("Crear")
+      stage.centerOnScreen()
+      stage.show()
+    }
   }
 
   object StageLoader {
@@ -107,6 +118,7 @@ package helper {
           }
         case None =>
       }
+      stage.setResizable(false)
       stage
     }
 
