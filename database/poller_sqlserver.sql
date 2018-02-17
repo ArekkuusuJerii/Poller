@@ -99,16 +99,16 @@ GO
 CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login INT OUT
   AS
   --Declare variable
-  DECLARE @exists INT, @id INT
+  DECLARE @id INT
   --Check for match
-  SELECT @exists = count(id_pk), @id = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk
-  IF @exists = 1
-    SET @login = @id
-  ELSE
-    SET @login = -1
+  IF exists(SELECT @id = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk)
+      BEGIN
+        SET @login = @id
+      END
+  ELSE SET @login = -1
   --Send confirmation
   SELECT @login
-  GO
+GO
 
 CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @email VARCHAR(45), @password VARCHAR(45), @success BIT OUT
   AS
@@ -125,31 +125,27 @@ CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @emai
 
 CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
   AS
-  --Declare variable
-  DECLARE @count INT
   --Check for existence
-  SELECT @count = count(email) FROM Respondiente WHERE email = @email
-  IF @count = 0
-      SET @confirm = 1
-  ELSE
-    SET @confirm = 0
+  IF NOT exists(SELECT email FROM Respondiente WHERE email = @email)
+      BEGIN
+        SET @confirm = 1
+      END
+  ELSE SET @confirm = 0
   --Send confirmation
   SELECT @confirm
-  GO
+GO
 
 CREATE VIEW Active_Polls AS SELECT id_pk FROM Encuesta WHERE activa = 1;
 GO
 
 CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
   AS
-  --Declare variable
-  DECLARE @count INT
   --Check for existence
-  SELECT @count = count(id_pk) FROM Active_Polls WHERE id_pk = @token
-  IF @count != 0
-    SET @active = 1
-  ELSE
-    SET @active = 0
+  IF exists(SELECT id_pk FROM Active_Polls WHERE id_pk = @token)
+      BEGIN
+        SET @active = 1
+      END
+  ELSE SET @active = 0
   --Send confirmation
   SELECT @active
 GO
@@ -158,10 +154,42 @@ CREATE VIEW Poll_Owners AS SELECT R.id_pk AS Propetario, E.id_pk AS Token FROM R
 
 CREATE PROCEDURE getIsPollOwner @owner INT, @token VARCHAR(8), @isOwner BIT OUT
   AS
-  DECLARE @count INT
-  SELECT @count = count(*) FROM Poll_Owners WHERE propetario = @owner AND token = @token;
-  IF @count > 0
-    SET @isOwner = 1
-  ELSE
-    SET @isOwner = 0
-  GO
+  --Check for existence
+  IF exists(SELECT * FROM Poll_Owners WHERE propetario = @owner AND token = @token)
+      BEGIN
+        SET @isOwner = 1
+      END
+  ELSE SET @isOwner = 0
+  --Send confirmation
+  SELECT @isOwner
+GO
+
+CREATE PROCEDURE generateToken @token VARCHAR(8) OUT
+AS
+  --Declare variables
+  DECLARE @chars VARCHAR(35), @generated VARCHAR(8), @count INT, @unique BIT
+  SET @chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  SET @generated = ''
+  SET @count = 0
+  --Loop string generator
+  WHILE @unique = 0 BEGIN
+    IF (@count < 8)
+      BEGIN
+        --Increase char count
+        SET @count = @count + 1
+        --Concatenate varchar
+        SET @generated = @generated + substring(@chars, (abs(checksum(newid())) % 36) + 1, 1)
+      END
+    ELSE
+      BEGIN
+        SET @count = 0
+        --Check for non existence
+        IF NOT exists(SELECT token FROM Poll_Owners WHERE token = @token)
+          BEGIN
+            SET @unique = 1
+          END
+      END
+  END
+  --Return token
+  SELECT @token
+GO
