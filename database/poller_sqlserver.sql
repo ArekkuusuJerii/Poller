@@ -184,7 +184,7 @@ AS
       BEGIN
         SET @count = 0
         --Check for non existence
-        IF NOT exists(SELECT token FROM Poll_Owners WHERE token = @token)
+        IF NOT exists(SELECT * FROM Poll_Owners WHERE token = @token)
           BEGIN
             SET @unique = 1
           END
