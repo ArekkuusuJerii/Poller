@@ -137,6 +137,9 @@ CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
   SELECT @confirm
   GO
 
+CREATE VIEW Active_Polls AS SELECT id_pk FROM Encuesta WHERE activa = 1;
+GO
+
 CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
   AS
   --Declare variable
@@ -150,5 +153,3 @@ CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
   --Send confirmation
   SELECT @active
 GO
-
-CREATE VIEW Active_Polls AS SELECT id_pk FROM Encuesta WHERE activa = 1;
