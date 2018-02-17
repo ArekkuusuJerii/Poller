@@ -36,7 +36,7 @@
                     <Image url="@../img/register.png" />
                 </ImageView>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.columnIndex="1">
                 <Label layoutX="22.0" layoutY="58.0" text="REGISTRO">
                     <font>
                         <Font name="Consolas" size="24.0" />
@@ -62,6 +62,13 @@
                     <Font name="Consolas" size="18.0" />
                 </font>
             </Label>
+         <Label layoutX="310.0" layoutY="8.0" style="-fx-text-fill: red;" text="* Campo requerido">
+            <font>
+               <Font size="9.0" />
+            </font>
+         </Label>
+         <Label layoutX="238.0" layoutY="72.0" style="-fx-text-fill: red;" text="*" />
+         <Label layoutX="238.0" layoutY="139.0" style="-fx-text-fill: red;" text="*" />
         </Pane>
         <Pane prefHeight="92.0" prefWidth="400.0" style="-fx-border-color: white; -fx-background-color: #262626;" GridPane.rowIndex="2">
             <Label layoutX="14.0" layoutY="51.0" text="Correo Electrónico:">
@@ -92,6 +99,14 @@
                     <Font name="Consolas" size="14.0" />
                 </font>
             </Button>
+         <Button layoutX="302.0" layoutY="265.0" mnemonicParsing="false" onMouseReleased="#handleCancelEvent" style="-fx-text-fill: red;" text="Cancelar">
+            <font>
+               <Font name="Consolas" size="14.0" />
+            </font>
+         </Button>
+         <Label layoutX="238.0" layoutY="72.0" style="-fx-text-fill: red;" text="*" />
+         <Label layoutX="238.0" layoutY="139.0" style="-fx-text-fill: red;" text="*" />
+         <Label layoutX="238.0" layoutY="209.0" style="-fx-text-fill: red;" text="*" />
         </Pane>
     </GridPane>
 </AnchorPane>

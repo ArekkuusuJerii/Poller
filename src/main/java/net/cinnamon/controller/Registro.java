@@ -40,6 +40,7 @@ public class Registro implements IController {
         tf_email.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 boolean isEmail = StringHelper.checkEmail(tf_email.getText());
+                if(isEmail) isEmail = RegisterImpl.canCreateAccount(tf_email.getText());
                 StyleHelper.apply(tf_email, StyleHelper.TextColor(), isEmail ? "white" : "red");
             }
         });
@@ -50,41 +51,51 @@ public class Registro implements IController {
     }
 
     @FXML
+    public void handleCancelEvent(MouseEvent event) {
+        StageHelper.openLogin();
+        hideWindow();
+    }
+
+    @FXML
     public void handleAcceptEvent(MouseEvent event) {
-        boolean nonEmpty = nonEmptyFields();
-        boolean matchingPasswords = passWordsMatch();
-        if (nonEmpty && matchingPasswords) {
-            AlertHelper.showConfirmation("Registrar nuevo usuario: " + tf_email.getText() + "?")
-                    .ifPresent(button -> {
-                        if (button == ButtonType.OK) {
-                            //Send to DB
-                            boolean registrado = RegisterImpl.register(
-                                    tf_first_name.getText(),
-                                    tf_second_name.getText(),
-                                    tf_email.getText(),
-                                    pf_password_0.getText()
-                            );
-                            if (registrado) {
-                                Login.userEmail = tf_email.getText();
-                                StageHelper.openLogin();
-                                hideWindow();
-                            }
-                        }
-                    });
-        } else {
-            if(!nonEmpty) {
-                AlertHelper.showError("No pueden haber campos vacios")
-                        .showAndWait();
-            }
-            if(!matchingPasswords) {
-                AlertHelper.showError("Las contraseñas no coinciden")
-                        .showAndWait()
-                        .ifPresent(button -> {
-                            pf_password_0.setText("");
-                            pf_password_1.setText("");
-                        });
-            }
-        }
+        if(StringHelper.checkEmail(tf_email.getText())) {
+            if (RegisterImpl.canCreateAccount(tf_email.getText())) {
+                boolean nonEmpty = nonEmptyFields();
+                boolean matchingPasswords = passWordsMatch();
+                if (nonEmpty && matchingPasswords) {
+                    AlertHelper.showConfirmation("Registrarse como: '" + tf_email.getText() + "' ?")
+                            .ifPresent(button -> {
+                                if (button == ButtonType.OK) {
+                                    //Send to DB
+                                    boolean registrado = RegisterImpl.register(
+                                            tf_first_name.getText(),
+                                            tf_second_name.getText(),
+                                            tf_email.getText(),
+                                            pf_password_0.getText()
+                                    );
+                                    if (registrado) {
+                                        Login.userEmail = tf_email.getText();
+                                        StageHelper.openLogin();
+                                        hideWindow();
+                                    }
+                                }
+                            });
+                } else {
+                    if (!nonEmpty) {
+                        AlertHelper.showError("No pueden haber campos vacios")
+                                .showAndWait();
+                    }
+                    if (!matchingPasswords) {
+                        AlertHelper.showError("Las contraseñas no coinciden")
+                                .showAndWait()
+                                .ifPresent(button -> {
+                                    pf_password_0.setText("");
+                                    pf_password_1.setText("");
+                                });
+                    }
+                }
+            } else AlertHelper.showError("Este correo ya está registrado").showAndWait();
+        } else AlertHelper.showError(tf_email.getText() + " no es un correo válido").showAndWait();
     }
 
     private boolean nonEmptyFields() {

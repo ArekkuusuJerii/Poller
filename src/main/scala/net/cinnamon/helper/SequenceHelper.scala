@@ -79,7 +79,7 @@ object SequenceHelper {
           val statement = connection.prepareCall(call)
           setOut(statement)
           setIn(statement)
-          if (statement.execute())
+          if (statement.execute() && out.isEmpty)
             executeStatement(statement, function)
           if (out.nonEmpty)
             collectOutputs(statement)

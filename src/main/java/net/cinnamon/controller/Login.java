@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
 import net.cinnamon.helper.StringHelper;
 import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.LoginImpl;
+
+import java.util.Optional;
 
 public class Login implements IController {
 
@@ -34,12 +37,13 @@ public class Login implements IController {
 
     @FXML
     public void handleLoginEvent(MouseEvent event) {
-        LoginImpl.login(tf_email.getText(), pf_password.getText()).ifPresent(key -> {
+        Optional<Integer> optional = LoginImpl.login(tf_email.getText(), pf_password.getText());
+        if (optional.isPresent()) {
             Login.userEmail = tf_email.getText();
-            Login.userID = key;
+            Login.userID = optional.get();
             StageHelper.openMenu();
             hideWindow();
-        });
+        } else AlertHelper.showError("Correo o Contraseña incorrecta").showAndWait();
     }
 
     @FXML

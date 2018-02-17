@@ -91,7 +91,12 @@ CREATE PROCEDURE test_in @some VARCHAR(255)
   SELECT @some as value;
   GO
 
-CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login BIT OUT
+CREATE PROCEDURE test_out @value INT OUT
+  AS
+  SELECT @value = 2688164;
+GO
+
+CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login INT OUT
   AS
   --Declare variable
   DECLARE @exists INT, @id INT;
@@ -107,10 +112,27 @@ CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login BIT OUT
 
 CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @email VARCHAR(45), @password VARCHAR(45), @success BIT OUT
   AS
+  --Insert values
   INSERT INTO Respondiente VALUES (@firstName, @secondName, @email, @password)
+  --Confirm Insert
   IF @@ROWCOUNT = 1
       SET @success = 1;
   ELSE
     SET @success = 0
+  --Send Confirmation
   SELECT @success;
+  GO
+
+CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
+  AS
+  --Declare variable
+  DECLARE @count INT;
+  --Check for existence
+  SELECT @count = count(email) FROM Respondiente WHERE email = @email;
+  IF @count = 0
+      SET @confirm = 1;
+  ELSE
+    SET @confirm = 0;
+  --Send confirmation
+  SELECT @confirm;
   GO
