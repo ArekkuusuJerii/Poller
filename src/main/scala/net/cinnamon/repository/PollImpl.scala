@@ -18,7 +18,8 @@ object PollImpl {
 
   def getIsPollOwner(token: String): Boolean = {
     var out = false
-    SequenceHelper.call(Map("owner" -> Login.userID, "token" -> token), Map("isOwner" -> Types.BOOLEAN))("{call getIsPollOwner(?,?)}",
+    val owner = Int.box(Login.userID)
+    SequenceHelper.call(Map("owner" -> owner, "token" -> token), Map("isOwner" -> Types.BOOLEAN))("{call getIsPollOwner(?,?,?)}",
       _.getOrElse("isOwner", false) match {
         case any: Boolean => out = any;
       }
