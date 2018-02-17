@@ -31,7 +31,7 @@ public class Menu implements IController {
 
     @FXML
     public void handleOpenEvent(MouseEvent event) {
-        if (PollImpl.getIsPollActive(tf_token.getText())) {
+        if (!tf_token.getText().isEmpty() && PollImpl.getIsPollActive(tf_token.getText())) {
             StageHelper.openPoll();
             hideWindow();
         } else AlertHelper.showError("Este token no es válido").showAndWait();
@@ -39,7 +39,7 @@ public class Menu implements IController {
 
     @FXML
     public void handleVisualizeEvent(MouseEvent event) {
-
+        StageHelper.openVisualize(lb_user.getScene().getWindow());
     }
 
     @FXML

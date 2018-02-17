@@ -153,3 +153,15 @@ CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
   --Send confirmation
   SELECT @active
 GO
+
+CREATE VIEW Poll_Owners AS SELECT R.id_pk AS Propetario, E.id_pk AS Token FROM Respondiente R INNER JOIN Encuesta E ON R.id_pk = E.propietario_fk;
+
+CREATE PROCEDURE getIsPollOwner @owner INT, @token VARCHAR(8), @isOwner BIT OUT
+  AS
+  DECLARE @count INT
+  SELECT @count = count(*) FROM Poll_Owners WHERE propetario = @owner AND token = @token;
+  IF @count > 0
+    SET @isOwner = 1
+  ELSE
+    SET @isOwner = 0
+  GO

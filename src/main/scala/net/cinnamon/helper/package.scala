@@ -93,6 +93,15 @@ package helper {
       stage.centerOnScreen()
       stage.show()
     }
+
+    def openVisualize(window: Window): Unit = {
+      val stage = StageLoader.load(getClass, "view/visualize.fxml")
+      stage.initModality(Modality.WINDOW_MODAL)
+      stage.initOwner(window)
+      stage.setTitle("Ver Encuesta")
+      stage.centerOnScreen()
+      stage.show()
+    }
   }
 
   object StageLoader {
