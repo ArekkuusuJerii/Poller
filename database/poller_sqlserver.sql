@@ -99,15 +99,15 @@ GO
 CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login INT OUT
   AS
   --Declare variable
-  DECLARE @exists INT, @id INT;
+  DECLARE @exists INT, @id INT
   --Check for match
-  SELECT @exists = count(id_pk), @id = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk;
+  SELECT @exists = count(id_pk), @id = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk
   IF @exists = 1
-    SET @login = @id;
+    SET @login = @id
   ELSE
-    SET @login = -1;
+    SET @login = -1
   --Send confirmation
-  SELECT @login;
+  SELECT @login
   GO
 
 CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @email VARCHAR(45), @password VARCHAR(45), @success BIT OUT
@@ -116,7 +116,7 @@ CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @emai
   INSERT INTO Respondiente VALUES (@firstName, @secondName, @email, @password)
   --Confirm Insert
   IF @@ROWCOUNT = 1
-      SET @success = 1;
+      SET @success = 1
   ELSE
     SET @success = 0
   --Send Confirmation
@@ -126,13 +126,29 @@ CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @emai
 CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
   AS
   --Declare variable
-  DECLARE @count INT;
+  DECLARE @count INT
   --Check for existence
-  SELECT @count = count(email) FROM Respondiente WHERE email = @email;
+  SELECT @count = count(email) FROM Respondiente WHERE email = @email
   IF @count = 0
-      SET @confirm = 1;
+      SET @confirm = 1
   ELSE
-    SET @confirm = 0;
+    SET @confirm = 0
   --Send confirmation
-  SELECT @confirm;
+  SELECT @confirm
   GO
+
+CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
+  AS
+  --Declare variable
+  DECLARE @count INT
+  --Check for existence
+  SELECT @count = count(id_pk) FROM Active_Polls WHERE id_pk = @token
+  IF @count != 0
+    SET @active = 1
+  ELSE
+    SET @active = 0
+  --Send confirmation
+  SELECT @active
+GO
+
+CREATE VIEW Active_Polls AS SELECT id_pk FROM Encuesta WHERE activa = 1;
