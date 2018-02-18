@@ -38,5 +38,14 @@ object Test extends App {
     emails foreach(email => println(email, RegisterImpl.canCreateAccount(email)))
   }
 
-  checkEmail()
+  def randomToken(): Unit = {
+    SequenceHelper.call(Map.empty, Map("token" -> Types.VARCHAR))("{call generateToken(?)}",
+      map => println(map.getOrElse("token", "Fail"))
+    )
+  }
+
+  randomToken()
+  randomToken()
+  randomToken()
+  randomToken()
 }
