@@ -1,9 +1,11 @@
 import java.sql.Types
 
+import com.google.gson.Gson
 import net.cinnamon.connection.DataBaseConnection
 import net.cinnamon.helper.SequenceHelper
 import net.cinnamon.repository.PollImpl.Token
 import net.cinnamon.repository.RegisterImpl
+import net.cinnamon.utils.PollBuilder
 
 object Test extends App {
   def connectionTest() {
@@ -29,5 +31,14 @@ object Test extends App {
     )
   }
 
-  callRandomToken()
+  def deserialize(): Unit = {
+    val poll = PollBuilder.+("Test")
+    poll ? "Is this a test?" - "Yes" - "No"
+    poll ?+ "Are you sure?" - "Yes" - "Yes" - "Yes"
+    poll ?- "Really...?"
+    val json = new Gson()
+    println(json.toJson(poll:>))
+  }
+
+  deserialize()
 }

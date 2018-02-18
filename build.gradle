@@ -32,6 +32,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.google.code.gson:gson:2.8.0'
     compile 'org.scala-lang:scala-library:2.11.8'
     compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.2.2.jre8'
     testCompile 'org.scalatest:scalatest_2.11:3.0.0'
