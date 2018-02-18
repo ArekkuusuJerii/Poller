@@ -88,7 +88,7 @@ GO
 INSERT INTO Tipo VALUES ('Open');
 GO
 
-CREATE PROCEDURE test
+/*CREATE PROCEDURE test -- Deleted, leaving this here as examples
   AS
   SELECT 'Hello World' AS hi;
   GO
@@ -101,7 +101,7 @@ CREATE PROCEDURE test_in @some VARCHAR(255)
 CREATE PROCEDURE test_out @value INT OUT
   AS
   SELECT @value = 2688164;
-GO
+GO*/
 
 CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login INT OUT
   AS
@@ -157,7 +157,7 @@ CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
   SELECT @active
 GO
 
-CREATE VIEW Poll_Owners AS SELECT R.id_pk AS Propetario, E.id_pk AS Token FROM Respondiente R INNER JOIN Encuesta E ON R.id_pk = E.propietario_fk;
+CREATE VIEW Poll_Owners AS SELECT R.id_pk AS propetario, E.id_pk AS token FROM Respondiente R INNER JOIN Encuesta E ON R.id_pk = E.propietario_fk;
 
 CREATE PROCEDURE getIsPollOwner @owner INT, @token VARCHAR(8), @isOwner BIT OUT
   AS
@@ -203,14 +203,47 @@ AS
   SELECT @token
 GO
 
-CREATE PROCEDURE registerPoll @title VARCHAR(45), @owner INT, @active BIT, @token VARCHAR(8) OUT
-  AS
-  DECLARE @generatedToken VARCHAR(8)
-  EXEC generateToken @generatedToken
-  IF @generatedToken IS NOT NULL
+CREATE PROCEDURE createPoll @title VARCHAR(45), @owner INT, @active BIT, @token VARCHAR(8) OUT
+AS
+  --Check for existence
+  IF NOT exists(SELECT * FROM Poll_Owners WHERE propetario = @owner AND token = @token)
     BEGIN
-      INSERT INTO Encuesta VALUES (@generatedToken, @title, @active, @owner)
-      SET @token = @generatedToken;
+      DECLARE @generatedToken VARCHAR(8)
+      --Generate token
+      EXEC generateToken @generatedToken
+      IF @generatedToken IS NOT NULL
+        BEGIN
+          --Insert values
+          INSERT INTO Encuesta VALUES (@generatedToken, @title, @active, @owner)
+          SET @token = @generatedToken;
+        END
     END
-  SELECT @token
+  ELSE
+    BEGIN
+      --Update Poll
+      UPDATE Encuesta SET titulo = @title, activa = @active WHERE propietario_fk = @owner AND id_pk = @token
+    END
+  SELECT @token;
+GO
+
+CREATE VIEW Questions_Poll AS SELECT E.id_pk AS token, P.id_pk AS id, P.texto AS texto, P.tipo_fk AS tipo FROM Pregunta P INNER JOIN Encuesta E ON P.encuesta_fk = E.id_pk
+
+CREATE PROCEDURE createQuestion @text VARCHAR(255), @tipo INT, @token VARCHAR(8), @id INT OUT
+  AS
+  IF NOT exists(SELECT * FROM Questions_Poll WHERE id = @id)
+      BEGIN
+        --Insert values
+        INSERT INTO Pregunta VALUES (@text, @token, @tipo)
+        --Confirm Insert
+        IF @@ROWCOUNT = 1
+          SET @id = scope_identity()
+        ELSE
+          SET @id = -1
+      END
+  ELSE
+  BEGIN
+    UPDATE Pregunta SET texto = @text, tipo_fk = @tipo WHERE id_pk = @id
+  END
+  --Send Information
+  SELECT @id;
 GO

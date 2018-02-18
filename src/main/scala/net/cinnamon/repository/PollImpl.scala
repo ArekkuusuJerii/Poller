@@ -30,7 +30,7 @@ object PollImpl {
     out
   }
 
-  def registerPoll(title: String, active: Boolean): Token = {
+  def createPoll(title: String, active: Boolean): Token = {
     var token = ""
     val owner = Int.box(Login.userID)
     val in = Map(
@@ -38,7 +38,7 @@ object PollImpl {
       "owner" -> owner,
       "active" -> active
     )
-    SequenceHelper.call(in, Map("token" -> Types.VARCHAR))("{call registerPoll(?,?,?,?)}",
+    SequenceHelper.call(in, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?)}",
       _.getOrElse("token", "") match {
         case any: String if any != null => token = any
       }
@@ -46,7 +46,7 @@ object PollImpl {
     token
   }
 
-  def addQuestion(text: String, kind: Tipo, token: Token): Unit = {
+  def createQuestion(text: String, kind: Tipo, token: Token): Unit = {
 
   }
 }
