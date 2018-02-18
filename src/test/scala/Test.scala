@@ -2,7 +2,7 @@ import java.sql.Types
 
 import net.cinnamon.connection.DataBaseConnection
 import net.cinnamon.helper.SequenceHelper
-import net.cinnamon.repository.RegisterImpl
+import net.cinnamon.repository.{PollImpl, RegisterImpl}
 
 object Test extends App {
   def connectionTest() {
@@ -38,14 +38,11 @@ object Test extends App {
     emails foreach(email => println(email, RegisterImpl.canCreateAccount(email)))
   }
 
-  def randomToken(): Unit = {
-    SequenceHelper.call(Map.empty, Map("token" -> Types.VARCHAR))("{call generateToken(?)}",
-      map => println(map.getOrElse("token", "Fail"))
-    )
+  def randomTokens(): Unit = {
+    for(0 <- 4) {
+      println(PollImpl.getRandomToken)
+    }
   }
 
-  randomToken()
-  randomToken()
-  randomToken()
-  randomToken()
+  randomTokens()
 }
