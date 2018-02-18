@@ -6,6 +6,8 @@ import net.cinnamon.controller.Login
 import net.cinnamon.entity.Tipo
 import net.cinnamon.helper.SequenceHelper
 
+import scala.collection.mutable
+
 object PollImpl {
   type Token = String
 
@@ -30,15 +32,16 @@ object PollImpl {
     out
   }
 
-  def createPoll(title: String, active: Boolean): Token = {
+  def createPoll(title: String, active: Boolean)(token: Token): Token = {
     var token = ""
     val owner = Int.box(Login.userID)
-    val in = Map(
+    val in = mutable.Map(
       "title" -> title,
       "owner" -> owner,
       "active" -> active
     )
-    SequenceHelper.call(in, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?)}",
+    if(token != null && token.nonEmpty) in += "token" -> token
+    SequenceHelper.call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?)}",
       _.getOrElse("token", "") match {
         case any: String if any != null => token = any
       }
@@ -46,7 +49,19 @@ object PollImpl {
     token
   }
 
-  def createQuestion(text: String, kind: Tipo, token: Token): Unit = {
-
+  def createQuestion(text: String, kind: Tipo, token: Token)(id: Int): Int = {
+    var id = -1
+    val in = mutable.Map(
+      "text" -> text,
+      "kind" -> kind.ordinal(),
+      "token" -> token
+    )
+    if(id > 0) in += "id" -> id
+    SequenceHelper.call(in.toMap, Map("id" -> Types.VARCHAR))("{call createPoll(?,?,?,?)}",
+      _.getOrElse("token", -1) match {
+        case any: Int if any > 0 => id = any
+      }
+    )
+    id
   }
 }

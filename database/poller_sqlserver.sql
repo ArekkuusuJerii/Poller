@@ -223,17 +223,18 @@ AS
       --Update Poll
       UPDATE Encuesta SET titulo = @title, activa = @active WHERE propietario_fk = @owner AND id_pk = @token
     END
-  SELECT @token;
+  SELECT @token
 GO
 
 CREATE VIEW Questions_Poll AS SELECT E.id_pk AS token, P.id_pk AS id, P.texto AS texto, P.tipo_fk AS tipo FROM Pregunta P INNER JOIN Encuesta E ON P.encuesta_fk = E.id_pk
 
-CREATE PROCEDURE createQuestion @text VARCHAR(255), @tipo INT, @token VARCHAR(8), @id INT OUT
+CREATE PROCEDURE createQuestion @text VARCHAR(255), @kind INT, @token VARCHAR(8), @id INT OUT
   AS
+  --Check for existence
   IF NOT exists(SELECT * FROM Questions_Poll WHERE id = @id)
       BEGIN
         --Insert values
-        INSERT INTO Pregunta VALUES (@text, @token, @tipo)
+        INSERT INTO Pregunta VALUES (@text, @token, @kind)
         --Confirm Insert
         IF @@ROWCOUNT = 1
           SET @id = scope_identity()
@@ -242,8 +243,35 @@ CREATE PROCEDURE createQuestion @text VARCHAR(255), @tipo INT, @token VARCHAR(8)
       END
   ELSE
   BEGIN
-    UPDATE Pregunta SET texto = @text, tipo_fk = @tipo WHERE id_pk = @id
+    UPDATE Pregunta SET texto = @text, tipo_fk = @kind WHERE id_pk = @id
   END
   --Send Information
-  SELECT @id;
+  SELECT @id
+GO
+
+CREATE VIEW Answer_Question AS SELECT P.id_pk AS pregunta, R.id_pk AS id, R.respuesta AS respuesta FROM Pregunta_Respuesta R INNER JOIN Pregunta P ON R.pregunta_fk = P.id_pk
+
+CREATE PROCEDURE createAnswer @answer VARCHAR(255), @question INT, @id INT OUT
+  AS
+  --Check if the question is not Open
+  IF NOT exists(SELECT * FROM Questions_Poll WHERE id = @question AND tipo = 3)
+    BEGIN
+      --Check for existence
+      IF NOT exists(SELECT id FROM Answer_Question WHERE id = @id)
+        BEGIN
+          --Insert values
+          INSERT INTO Pregunta_Respuesta VALUES (@answer, @question)
+          --Confirm Insert
+          IF @@ROWCOUNT = 1
+            SET @id = scope_identity()
+          ELSE
+            SET @id = -1
+        END
+      ELSE
+        BEGIN
+          UPDATE Pregunta_Respuesta SET respuesta = @answer WHERE id_pk = @id
+        END
+    END
+  --Send Information
+  SELECT @id
 GO
