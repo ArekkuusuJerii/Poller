@@ -195,3 +195,10 @@ AS
   --Return token
   SELECT @token
 GO
+
+INSERT INTO Tipo VALUES ('Single');
+GO
+INSERT INTO Tipo VALUES ('Multiple');
+GO
+INSERT INTO Tipo VALUES ('Open');
+GO
