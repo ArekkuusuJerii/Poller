@@ -170,6 +170,7 @@ AS
   DECLARE @chars VARCHAR(35), @generated VARCHAR(8), @count INT, @unique BIT
   SET @chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   SET @generated = ''
+  SET @unique = 0
   SET @count = 0
   --Loop string generator
   WHILE @unique = 0 BEGIN
@@ -184,8 +185,9 @@ AS
       BEGIN
         SET @count = 0
         --Check for non existence
-        IF NOT exists(SELECT * FROM Poll_Owners WHERE token = @token)
+        IF NOT exists(SELECT * FROM Poll_Owners WHERE token = @generated)
           BEGIN
+            SET @token = @generated
             SET @unique = 1
           END
       END
