@@ -128,7 +128,7 @@ CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @emai
     SET @success = 0
   --Send Confirmation
   SELECT @success;
-  GO
+GO
 
 CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
   AS
@@ -243,6 +243,7 @@ CREATE PROCEDURE createQuestion @text VARCHAR(255), @kind INT, @token VARCHAR(8)
       END
   ELSE
   BEGIN
+    --Update Question
     UPDATE Pregunta SET texto = @text, tipo_fk = @kind WHERE id_pk = @id
   END
   --Send Information
@@ -269,6 +270,7 @@ CREATE PROCEDURE createAnswer @answer VARCHAR(255), @question INT, @id INT OUT
         END
       ELSE
         BEGIN
+          --Update Answer
           UPDATE Pregunta_Respuesta SET respuesta = @answer WHERE id_pk = @id
         END
     END
