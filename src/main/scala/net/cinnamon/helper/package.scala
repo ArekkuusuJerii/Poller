@@ -128,6 +128,7 @@ package helper {
         case None =>
       }
       stage.setResizable(false)
+      stage.sizeToScene()
       stage
     }
 

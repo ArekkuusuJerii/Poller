@@ -18,7 +18,7 @@ public class Visualizar implements IController {
 
     @FXML
     public void handleOpenEvent(MouseEvent event) {
-        if(!tf_token.getText().isEmpty() || tf_token.getText().length() > 8) {
+        if(!tf_token.getText().isEmpty() && tf_token.getText().length() > 8) {
             if(PollImpl.getIsPollOwner(tf_token.getText())) {
                 hideWindow();
             } else AlertHelper.showError("Esta encuesta no te pertenece").showAndWait();
