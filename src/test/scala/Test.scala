@@ -32,12 +32,12 @@ object Test extends App {
   }
 
   def deserialize(): Unit = {
-    val poll = PollBuilder.+("Test")
+    val poll = PollBuilder + "Test"
     poll ? "Is this a test?" - "Yes" - "No"
     poll ?+ "Are you sure?" - "Yes" - "Yes" - "Yes"
     poll ?- "Really...?"
     val json = new Gson()
-    println(json.toJson(poll:>))
+    println(json.toJson(poll!))
   }
 
   deserialize()

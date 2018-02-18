@@ -25,7 +25,7 @@ object PollBuilder {
     this
   }
 
-  def :> : Encuesta = {
+  def ! : Encuesta = {
     poll
   }
 
