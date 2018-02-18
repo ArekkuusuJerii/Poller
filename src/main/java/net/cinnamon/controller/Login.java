@@ -14,9 +14,6 @@ import java.util.Optional;
 
 public class Login implements IController {
 
-    public static String userEmail;
-    public static int userID = -1;
-
     @FXML
     private TextField tf_email;
     @FXML
@@ -32,24 +29,28 @@ public class Login implements IController {
         });
         tf_email.setOnAction((event) -> pf_password.requestFocus());
         pf_password.setOnAction(event -> handleLoginEvent(null));
-        if(userEmail != null) tf_email.setText(userEmail);
     }
 
     @FXML
     public void handleLoginEvent(MouseEvent event) {
         Optional<Integer> optional = LoginImpl.login(tf_email.getText(), pf_password.getText());
         if (optional.isPresent()) {
-            Login.userEmail = tf_email.getText();
-            Login.userID = optional.get();
-            StageHelper.openMenu();
+            Menu.setId(optional.get());
+            StageHelper.openMenu(tf_email.getText());
             hideWindow();
-        } else AlertHelper.showError("Correo o Contraseña incorrecta").showAndWait();
+        } else {
+            AlertHelper.showError("Correo o Contraseña incorrecta").showAndWait();
+        }
     }
 
     @FXML
     public void register(MouseEvent event) {
         StageHelper.openRegister();
         hideWindow();
+    }
+
+    public void setEmail(String email) {
+        tf_email.setText(email);
     }
 
     @Override

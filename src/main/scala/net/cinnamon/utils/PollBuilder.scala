@@ -42,7 +42,7 @@ object PollBuilder {
       builder
     }
 
-    def :> : Encuesta = {
+    def ! : Encuesta = {
       builder.poll
     }
   }

@@ -10,6 +10,8 @@ import net.cinnamon.repository.PollImpl;
 
 public class Menu implements IController {
 
+    private static int id;
+
     @FXML
     private Label lb_user;
     @FXML
@@ -17,15 +19,12 @@ public class Menu implements IController {
 
     @Override
     public void initialize() {
-        lb_user.setText(String.valueOf(Login.userEmail));
         tf_token.setOnAction((event -> handleOpenEvent(null)));
     }
 
     @FXML
     public void logout(MouseEvent event) {
-        Login.userEmail = null;
-        Login.userID = -1;
-        StageHelper.openLogin();
+        StageHelper.openLogin("");
         hideWindow();
     }
 
@@ -45,6 +44,18 @@ public class Menu implements IController {
     @FXML
     public void handleCreateEvent(MouseEvent event) {
          StageHelper.openFile(lb_user.getScene().getWindow());
+    }
+
+    public void setEmail(String email) {
+        lb_user.setText(email);
+    }
+
+    protected static void setId(int id) {
+        Menu.id = id;
+    }
+
+    public static int getId() {
+        return Menu.id;
     }
 
     @Override

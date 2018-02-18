@@ -16,6 +16,7 @@ object RegisterImpl {
     SequenceHelper.call(in, Map("success" -> Types.BOOLEAN))("{call register(?,?,?,?,?)}",
       _.getOrElse("success", false) match {
         case any: Boolean => out = any
+        case _ =>
       }
     )
     out
@@ -26,6 +27,7 @@ object RegisterImpl {
     SequenceHelper.call(Map("email" -> email), Map("confirm" -> Types.BOOLEAN))("{call canCreateAccount(?,?)}",
       _.getOrElse("confirm", false) match {
         case any: Boolean => out = any
+        case _ =>
       }
     )
     out

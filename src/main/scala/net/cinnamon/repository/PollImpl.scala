@@ -2,7 +2,7 @@ package net.cinnamon.repository
 
 import java.sql.Types
 
-import net.cinnamon.controller.Login
+import net.cinnamon.controller.Menu
 import net.cinnamon.entity.Tipo
 import net.cinnamon.helper.SequenceHelper
 
@@ -16,6 +16,7 @@ object PollImpl {
     SequenceHelper.call(Map("token" -> token), Map("active" -> Types.BOOLEAN))("{call getIsPollActive(?,?)}",
       _.getOrElse("active", false) match {
         case any: Boolean => out = any;
+        case _ =>
       }
     )
     out
@@ -23,10 +24,11 @@ object PollImpl {
 
   def getIsPollOwner(token: Token): Boolean = {
     var out = false
-    val owner = Int.box(Login.userID)
+    val owner = Int.box(Menu.getId)
     SequenceHelper.call(Map("owner" -> owner, "token" -> token), Map("isOwner" -> Types.BOOLEAN))("{call getIsPollOwner(?,?,?)}",
       _.getOrElse("isOwner", false) match {
         case any: Boolean => out = any;
+        case _ =>
       }
     )
     out
@@ -34,7 +36,7 @@ object PollImpl {
 
   def createPoll(title: String, active: Boolean)(token: Token): Token = {
     var token = ""
-    val owner = Int.box(Login.userID)
+    val owner = Int.box(Menu.getId)
     val in = mutable.Map(
       "title" -> title,
       "owner" -> owner,
@@ -43,7 +45,8 @@ object PollImpl {
     if(token != null && token.nonEmpty) in += "token" -> token
     SequenceHelper.call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?)}",
       _.getOrElse("token", "") match {
-        case any: String if any != null => token = any
+        case any: String => token = any
+        case _ =>
       }
     )
     token
@@ -53,13 +56,30 @@ object PollImpl {
     var id = -1
     val in = mutable.Map(
       "text" -> text,
-      "kind" -> kind.ordinal(),
-      "token" -> token
+      "token" -> token,
+      "kind" -> (kind.ordinal() + 1)
     )
     if(id > 0) in += "id" -> id
-    SequenceHelper.call(in.toMap, Map("id" -> Types.VARCHAR))("{call createPoll(?,?,?,?)}",
-      _.getOrElse("token", -1) match {
+    SequenceHelper.call(in.toMap, Map("id" -> Types.INTEGER))("{call createQuestion(?,?,?,?)}",
+      _.getOrElse("id", -1) match {
         case any: Int if any > 0 => id = any
+        case _ =>
+      }
+    )
+    id
+  }
+
+  def createAnswer(text: String, question: Int)(id: Int): Int = {
+    var id = -1
+    val in = mutable.Map(
+      "answer" -> text,
+      "question" -> question
+    )
+    if(id > 0) in += "id" -> id
+    SequenceHelper.call(in.toMap, Map("id" -> Types.INTEGER))("{call createAnswer(?,?,?)}",
+      _.getOrElse("id", -1) match {
+        case any: Int if any > 0 => id = any
+        case _ =>
       }
     )
     id

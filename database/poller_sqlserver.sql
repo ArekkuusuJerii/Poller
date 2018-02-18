@@ -142,7 +142,7 @@ CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
   SELECT @confirm
 GO
 
-CREATE VIEW Active_Polls AS SELECT id_pk FROM Encuesta WHERE activa = 1;
+CREATE VIEW Active_Polls AS SELECT id_pk AS token FROM Encuesta WHERE activa = 1;
 GO
 
 CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
@@ -206,22 +206,22 @@ GO
 CREATE PROCEDURE createPoll @title VARCHAR(45), @owner INT, @active BIT, @token VARCHAR(8) OUT
 AS
   --Check for existence
-  IF NOT exists(SELECT * FROM Poll_Owners WHERE propetario = @owner AND token = @token)
+  IF exists(SELECT * FROM Poll_Owners WHERE propetario = @owner AND token = @token)
+    BEGIN
+      --Update Poll
+      UPDATE Encuesta SET titulo = @title, activa = @active WHERE propietario_fk = @owner AND id_pk = @token
+    END
+  ELSE
     BEGIN
       DECLARE @generatedToken VARCHAR(8)
       --Generate token
-      EXEC generateToken @generatedToken
+      EXEC generateToken @token = @generatedToken OUT
       IF @generatedToken IS NOT NULL
         BEGIN
           --Insert values
           INSERT INTO Encuesta VALUES (@generatedToken, @title, @active, @owner)
           SET @token = @generatedToken;
         END
-    END
-  ELSE
-    BEGIN
-      --Update Poll
-      UPDATE Encuesta SET titulo = @title, activa = @active WHERE propietario_fk = @owner AND id_pk = @token
     END
   SELECT @token
 GO
@@ -231,20 +231,20 @@ CREATE VIEW Questions_Poll AS SELECT E.id_pk AS token, P.id_pk AS id, P.texto AS
 CREATE PROCEDURE createQuestion @text VARCHAR(255), @kind INT, @token VARCHAR(8), @id INT OUT
   AS
   --Check for existence
-  IF NOT exists(SELECT * FROM Questions_Poll WHERE id = @id)
-      BEGIN
-        --Insert values
-        INSERT INTO Pregunta VALUES (@text, @token, @kind)
-        --Confirm Insert
-        IF @@ROWCOUNT = 1
-          SET @id = scope_identity()
-        ELSE
-          SET @id = -1
-      END
-  ELSE
-  BEGIN
+  IF exists(SELECT * FROM Questions_Poll WHERE id = @id)
     --Update Question
     UPDATE Pregunta SET texto = @text, tipo_fk = @kind WHERE id_pk = @id
+  ELSE
+  BEGIN
+    BEGIN
+    --Insert values
+    INSERT INTO Pregunta VALUES (@text, @token, @kind)
+    --Confirm Insert
+    IF @@ROWCOUNT = 1
+      SET @id = scope_identity()
+    ELSE
+      SET @id = -1
+    END
   END
   --Send Information
   SELECT @id
@@ -258,7 +258,11 @@ CREATE PROCEDURE createAnswer @answer VARCHAR(255), @question INT, @id INT OUT
   IF NOT exists(SELECT * FROM Questions_Poll WHERE id = @question AND tipo = 3)
     BEGIN
       --Check for existence
-      IF NOT exists(SELECT id FROM Answer_Question WHERE id = @id)
+      IF exists(SELECT id FROM Answer_Question WHERE id = @id)
+        BEGIN
+          UPDATE Pregunta_Respuesta SET respuesta = @answer WHERE id_pk = @id
+        END
+      ELSE
         BEGIN
           --Insert values
           INSERT INTO Pregunta_Respuesta VALUES (@answer, @question)
@@ -268,12 +272,9 @@ CREATE PROCEDURE createAnswer @answer VARCHAR(255), @question INT, @id INT OUT
           ELSE
             SET @id = -1
         END
-      ELSE
-        BEGIN
-          --Update Answer
-          UPDATE Pregunta_Respuesta SET respuesta = @answer WHERE id_pk = @id
-        END
     END
   --Send Information
   SELECT @id
 GO
+
+CREATE VIEW Poll_Question_Answer AS SELECT P.token AS token, Q.id AS question, A.id AS answer FROM Active_Polls P INNER JOIN Questions_Poll Q ON P.token = Q.token LEFT JOIN Answer_Question A ON A.pregunta = Q.id

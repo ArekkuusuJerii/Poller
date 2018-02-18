@@ -5,7 +5,7 @@ import net.cinnamon.helper.StageHelper
 
 class Poller extends Application {
 	override def start(stage: Stage): Unit = {
-		StageHelper.openLogin(stage)
+		StageHelper.openLogin(stage, "")
 		stage.toFront()
 	}
 }

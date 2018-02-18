@@ -1,11 +1,12 @@
 package net.cinnamon.entity;
 
 import com.google.gson.annotations.SerializedName;
+import net.cinnamon.repository.PollImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pregunta implements ISerializable {
+public class Pregunta {
 
     //transient does not save to JSON
     transient public int id;
@@ -22,12 +23,14 @@ public class Pregunta implements ISerializable {
         this.tipo = tipo;
     }
 
-    @Override
-    public void write() {
-
+    public void create(Encuesta parent) {
+        int id = PollImpl.createQuestion(this.texto, this.tipo, parent.token, this.id);
+        if(id > 0) {
+            this.id = id;
+            respuestas.forEach(r -> r.create(this));
+        }
     }
 
-    @Override
     public void read() {
 
     }

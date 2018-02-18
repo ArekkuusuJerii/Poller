@@ -12,15 +12,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="200.0" prefWidth="300.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.Upload">
+<AnchorPane prefHeight="150.0" prefWidth="300.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.Upload">
    <children>
-      <GridPane prefHeight="200.0" prefWidth="300.0">
+      <GridPane prefHeight="150.0" prefWidth="300.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <GridPane prefHeight="71.0" prefWidth="300.0" style="-fx-border-color: white;">
@@ -52,8 +52,11 @@
             </GridPane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <Button layoutX="14.0" layoutY="38.0" mnemonicParsing="false" onMouseReleased="#handleAcceptEvent" text="Seleccionar" />
-                  <TextField fx:id="tf_file" layoutX="110.0" layoutY="38.0" onMouseClicked="#handleClickEvent" prefHeight="25.0" prefWidth="180.0" promptText="C:../archivo.json" />
+                  <Button layoutX="31.0" layoutY="13.0" mnemonicParsing="false" onMouseReleased="#handleAcceptEvent" text="Abrir">
+                     <font>
+                        <Font name="Consolas" size="12.0" />
+                     </font></Button>
+                  <TextField fx:id="tf_file" layoutX="108.0" layoutY="12.0" onMouseClicked="#handleClickEvent" prefHeight="25.0" prefWidth="180.0" promptText="C:../archivo.json" />
                </children>
             </Pane>
          </children>

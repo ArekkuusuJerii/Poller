@@ -11,6 +11,7 @@ object LoginImpl {
     SequenceHelper.call(Map("email" -> user, "password" -> password), Map("login" -> Types.INTEGER))("{call login(?,?,?)}", {
       _.getOrElse("login", -1) match {
         case any: Integer if any > 0 => option = Optional.of(any)
+        case _ =>
       }
     })
     option

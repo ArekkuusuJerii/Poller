@@ -52,7 +52,7 @@ public class Registro implements IController {
 
     @FXML
     public void handleCancelEvent(MouseEvent event) {
-        StageHelper.openLogin();
+        StageHelper.openLogin("");
         hideWindow();
     }
 
@@ -74,8 +74,7 @@ public class Registro implements IController {
                                             pf_password_0.getText()
                                     );
                                     if (registrado) {
-                                        Login.userEmail = tf_email.getText();
-                                        StageHelper.openLogin();
+                                        StageHelper.openLogin(tf_email.getText());
                                         hideWindow();
                                     }
                                 }
