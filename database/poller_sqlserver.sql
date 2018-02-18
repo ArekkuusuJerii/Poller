@@ -81,6 +81,13 @@ CREATE TABLE Respuesta_Abierta (
 );
 GO
 
+INSERT INTO Tipo VALUES ('Single');
+GO
+INSERT INTO Tipo VALUES ('Multiple');
+GO
+INSERT INTO Tipo VALUES ('Open');
+GO
+
 CREATE PROCEDURE test
   AS
   SELECT 'Hello World' AS hi;
@@ -196,9 +203,14 @@ AS
   SELECT @token
 GO
 
-INSERT INTO Tipo VALUES ('Single');
-GO
-INSERT INTO Tipo VALUES ('Multiple');
-GO
-INSERT INTO Tipo VALUES ('Open');
+CREATE PROCEDURE registerPoll @title VARCHAR(45), @owner INT, @active BIT, @token VARCHAR(8) OUT
+  AS
+  DECLARE @generatedToken VARCHAR(8)
+  EXEC generateToken @generatedToken
+  IF @generatedToken IS NOT NULL
+    BEGIN
+      INSERT INTO Encuesta VALUES (@generatedToken, @title, @active, @owner)
+      SET @token = @generatedToken;
+    END
+  SELECT @token
 GO

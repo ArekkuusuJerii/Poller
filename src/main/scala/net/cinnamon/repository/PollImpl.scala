@@ -30,19 +30,19 @@ object PollImpl {
     out
   }
 
-  def getRandomToken: Token = {
+  def registerPoll(title: String, active: Boolean): Token = {
     var token = ""
-    SequenceHelper.call(Map.empty, Map("token" -> Types.VARCHAR))("{call generateToken(?)}",
+    val owner = Int.box(Login.userID)
+    val in = Map(
+      "title" -> title,
+      "owner" -> owner,
+      "active" -> active
+    )
+    SequenceHelper.call(in, Map("token" -> Types.VARCHAR))("{call registerPoll(?,?,?,?)}",
       _.getOrElse("token", "") match {
-        case any: Token => token = any
+        case any: String if any != null => token = any
       }
     )
-    token
-  }
-
-  def registerPoll(title: String): Token = {
-    val token = getRandomToken
-
     token
   }
 

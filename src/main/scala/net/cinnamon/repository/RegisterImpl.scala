@@ -25,7 +25,7 @@ object RegisterImpl {
     var out = false
     SequenceHelper.call(Map("email" -> email), Map("confirm" -> Types.BOOLEAN))("{call canCreateAccount(?,?)}",
       _.getOrElse("confirm", false) match {
-        case any: Boolean => out = any;
+        case any: Boolean => out = any
       }
     )
     out

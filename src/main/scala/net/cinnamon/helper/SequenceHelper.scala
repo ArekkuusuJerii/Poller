@@ -60,7 +60,7 @@ object SequenceHelper {
     }
   }
 
-  def call(in: Map[String, AnyRef], out: Map[String, Int])(call: String, function: Map[String, AnyRef] => Unit): Unit = {
+  def call(in: Map[String, _], out: Map[String, Int])(call: String, function: Map[String, AnyRef] => Unit): Unit = {
     def setOut(statement: CallableStatement): Unit =
       out foreach { case (param, kind) => statement.registerOutParameter(param, kind) }
 
