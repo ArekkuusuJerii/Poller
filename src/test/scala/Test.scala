@@ -2,6 +2,7 @@ import java.sql.Types
 
 import com.google.gson.Gson
 import net.cinnamon.connection.DataBaseConnection
+import net.cinnamon.entity.Poll
 import net.cinnamon.helper.SequenceHelper
 import net.cinnamon.repository.PollImpl.Token
 import net.cinnamon.repository.RegisterImpl
@@ -37,8 +38,14 @@ object Test extends App {
     poll ?+ "Are you sure?" - "Yes" - "Yes" - "Yes"
     poll ?- "Really...?"
     val json = new Gson()
-    println(json.toJson(poll!))
+    println(json.toJson(poll!!))
   }
 
-  deserialize()
+  def deserialize(token: Token): Unit = {
+    val poll = Poll.read(token)
+    val json = new Gson()
+    println(json.toJson(poll))
+  }
+
+  deserialize("Y294SSW7")
 }

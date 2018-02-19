@@ -98,7 +98,7 @@ package helper {
       stage.show()
     }
 
-    def openVisualize(window: Window): Unit = {
+    def openStatistic(window: Window): Unit = {
       val stage = StageLoader.load(classOf[Statistic], "view/statistic.fxml")
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)

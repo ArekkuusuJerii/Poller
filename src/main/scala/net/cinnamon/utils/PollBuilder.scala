@@ -1,50 +1,54 @@
 package net.cinnamon.utils
 
-import net.cinnamon.entity
 import net.cinnamon.entity.Question.Kind
-import net.cinnamon.entity._
+import net.cinnamon.entity.{Answer, Poll, Question}
+
 
 object PollBuilder {
-  type Poll = PollBuilder.type
-  type Question = QuestionBuilder
-  private var poll: entity.Poll = _
+  type P = PollBuilder.type
+  type Q = QuestionBuilder
+  private var poll: Poll = _
 
-  def +(title: String): Poll = {
-    poll = new entity.Poll(title)
+  def +(title: String): P = {
+    poll = new Poll
+    poll.title = title
     this
   }
 
-  def ?(question: String): Question = {
-    new QuestionBuilder(this, question, Kind.SINGLE)
+  def ?(text: String): Q = {
+    new QuestionBuilder(this, text, Kind.SINGLE)
   }
 
-  def ?+(question: String): Question = {
-    new QuestionBuilder(this, question, Kind.MULTIPLE)
+  def ?+(text: String): Q = {
+    new QuestionBuilder(this, text, Kind.MULTIPLE)
   }
 
-  def ?-(question: String): Poll = {
-    poll.questions.add(new entity.Question(question, Kind.OPEN))
-    this
+  def ?-(text: String): P = {
+    new QuestionBuilder(this, text, Kind.OPEN)!
   }
 
-  def ! : entity.Poll = {
+  def !! : Poll = {
     poll
   }
 
-  class QuestionBuilder(builder: Poll, text: String, kind: Kind) {
-    val question = new entity.Question(text, kind)
+  class QuestionBuilder(builder: P, text: String, kind: Kind) {
+    val question = new Question
+    question.text = text
+    question.kind = kind
     builder.poll.questions.add(question)
 
-    def -(answer: String): Question = {
-      question.answers.add(new Answer(answer))
+    def -(text: String): Q = {
+      val answer = new Answer
+      answer.text = text
+      question.answers.add(answer)
       this
     }
 
-    def > : Poll = {
+    def ! : P = {
       builder
     }
 
-    def ! : entity.Poll = {
+    def !! : Poll = {
       builder.poll
     }
   }

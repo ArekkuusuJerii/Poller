@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="100.0" prefWidth="200.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.Token">
    <children>
       <Pane prefHeight="100.0" prefWidth="200.0">
@@ -16,7 +15,7 @@
                   <Font name="Consolas" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="tf_token" editable="false" layoutX="26.0" layoutY="50.0" />
+            <TextField fx:id="tf_token" alignment="CENTER" editable="false" layoutX="26.0" layoutY="50.0" />
          </children>
       </Pane>
    </children>

@@ -142,7 +142,7 @@ CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
   SELECT @confirm
 GO
 
-CREATE VIEW Active_Polls AS SELECT id_pk AS token FROM Encuesta WHERE activa = 1;
+CREATE VIEW Poll AS SELECT E.id_pk AS token, E.titulo AS titulo, E.activa AS activa, R.id_pk AS propetario FROM Encuesta E LEFT JOIN Respondiente R ON E.propietario_fk = R.id_pk;
 GO
 
 CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
@@ -156,8 +156,6 @@ CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
   --Send confirmation
   SELECT @active
 GO
-
-CREATE VIEW Poll_Owners AS SELECT R.id_pk AS propetario, E.id_pk AS token FROM Respondiente R INNER JOIN Encuesta E ON R.id_pk = E.propietario_fk;
 
 CREATE PROCEDURE getIsPollOwner @owner INT, @token VARCHAR(8), @isOwner BIT OUT
   AS
@@ -206,7 +204,7 @@ GO
 CREATE PROCEDURE createPoll @title VARCHAR(45), @owner INT, @active BIT, @token VARCHAR(8) OUT
 AS
   --Check for existence
-  IF exists(SELECT * FROM Poll_Owners WHERE propetario = @owner AND token = @token)
+  IF exists(SELECT * FROM Poll WHERE propetario = @owner AND token = @token)
     BEGIN
       --Update Poll
       UPDATE Encuesta SET titulo = @title, activa = @active WHERE propietario_fk = @owner AND id_pk = @token
@@ -226,12 +224,12 @@ AS
   SELECT @token
 GO
 
-CREATE VIEW Questions_Poll AS SELECT E.id_pk AS token, P.id_pk AS id, P.texto AS texto, P.tipo_fk AS kind FROM Pregunta P INNER JOIN Encuesta E ON P.encuesta_fk = E.id_pk
+CREATE VIEW Poll_Questions AS SELECT E.id_pk AS token, P.id_pk AS id, P.texto AS texto, P.tipo_fk AS kind FROM Pregunta P INNER JOIN Encuesta E ON P.encuesta_fk = E.id_pk
 
 CREATE PROCEDURE createQuestion @text VARCHAR(255), @kind INT, @token VARCHAR(8), @id INT OUT
   AS
   --Check for existence
-  IF exists(SELECT * FROM Questions_Poll WHERE id = @id)
+  IF exists(SELECT * FROM Poll_Questions WHERE id = @id)
     --Update Question
     UPDATE Pregunta SET texto = @text, tipo_fk = @kind WHERE id_pk = @id
   ELSE
@@ -242,23 +240,21 @@ CREATE PROCEDURE createQuestion @text VARCHAR(255), @kind INT, @token VARCHAR(8)
     --Confirm Insert
     IF @@ROWCOUNT = 1
       SET @id = scope_identity()
-    ELSE
-      SET @id = -1
     END
   END
   --Send Information
   SELECT @id
 GO
 
-CREATE VIEW Answer_Question AS SELECT P.id_pk AS pregunta, R.id_pk AS id, R.respuesta AS respuesta FROM Pregunta_Respuesta R INNER JOIN Pregunta P ON R.pregunta_fk = P.id_pk
+CREATE VIEW Question_Answer AS SELECT P.id_pk AS pregunta, R.id_pk AS id, R.respuesta AS respuesta FROM Pregunta_Respuesta R INNER JOIN Pregunta P ON R.pregunta_fk = P.id_pk
 
 CREATE PROCEDURE createAnswer @answer VARCHAR(255), @question INT, @id INT OUT
   AS
   --Check if the question is not Open
-  IF NOT exists(SELECT * FROM Questions_Poll WHERE id = @question AND tipo = 3)
+  IF NOT exists(SELECT * FROM Poll_Questions WHERE id = @question AND tipo = 3)
     BEGIN
       --Check for existence
-      IF exists(SELECT id FROM Answer_Question WHERE id = @id)
+      IF exists(SELECT id FROM Question_Answer WHERE id = @id)
         BEGIN
           UPDATE Pregunta_Respuesta SET respuesta = @answer WHERE id_pk = @id
         END
@@ -269,12 +265,26 @@ CREATE PROCEDURE createAnswer @answer VARCHAR(255), @question INT, @id INT OUT
           --Confirm Insert
           IF @@ROWCOUNT = 1
             SET @id = scope_identity()
-          ELSE
-            SET @id = -1
         END
     END
   --Send Information
   SELECT @id
 GO
 
-CREATE VIEW Poll_Question_Answer AS SELECT P.token AS token, Q.id AS question, A.id AS answer FROM Active_Polls P INNER JOIN Questions_Poll Q ON P.token = Q.token LEFT JOIN Answer_Question A ON A.pregunta = Q.id
+CREATE VIEW Poll_Question_Answer AS SELECT P.token AS token, Q.id AS question, A.id AS answer FROM Poll P INNER JOIN Poll_Questions Q ON P.token = Q.token LEFT JOIN Question_Answer A ON A.pregunta = Q.id
+GO
+
+CREATE PROCEDURE getPoll @token VARCHAR(8), @title VARCHAR(45) OUT
+  AS
+  SELECT @title = title FROM Active_Polls WHERE token = @token
+GO
+
+CREATE PROCEDURE getQuestion @token VARCHAR(8)
+  AS
+  SELECT id, texto, tipo FROM Poll_Questions WHERE token = @token
+GO
+
+CREATE PROCEDURE getAnswer @question INT
+  AS
+  SELECT id, respuesta FROM Question_Answer WHERE pregunta = @question
+GO

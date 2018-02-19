@@ -44,7 +44,7 @@
                     <Font name="Consolas" size="14.0" />
                 </font>
             </Label>
-            <Label fx:id="lb_user" layoutX="9.0" layoutY="42.0" prefHeight="25.0" prefWidth="158.0" style="-fx-background-color: #262626;" textAlignment="CENTER" />
+            <Label fx:id="lb_user" alignment="CENTER" layoutX="9.0" layoutY="42.0" prefHeight="25.0" prefWidth="158.0" style="-fx-background-color: #262626;" textAlignment="CENTER" />
             <Button layoutX="33.0" layoutY="93.0" mnemonicParsing="false" onMouseReleased="#logout" style="-fx-text-fill: red;" text="Cerrar Sesión">
                 <font>
                     <Font name="Consolas Bold" size="13.0" />

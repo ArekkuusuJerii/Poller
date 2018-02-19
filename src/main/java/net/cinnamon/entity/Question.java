@@ -18,30 +18,25 @@ public class Question {
     @SerializedName("respuestas")
     public List<Answer> answers = new ArrayList<>();
 
-    public Question(String text, Kind kind) {
-        this.text = text;
-        this.kind = kind;
-    }
-
-    public void create(Poll parent) {
-        int id = PollImpl.createQuestion(this.text, this.kind, parent.token, this.id);
+    public void create(String token) {
+        int id = PollImpl.createQuestion(this.text, this.kind, token, this.id);
         if(id > 0) {
             this.id = id;
-            answers.forEach(r -> r.create(this));
+            answers.forEach(r -> r.create(id));
         }
-    }
-
-    public void read() {
-
     }
 
     public enum Kind {
         SINGLE,
         MULTIPLE,
         OPEN;
-        
+
         public int id() {
             return ordinal() + 1;
+        }
+
+        public static Kind get(int id) {
+            return id <= values().length && id > 0 ? values()[id - 1] : Kind.OPEN;
         }
     }
 }

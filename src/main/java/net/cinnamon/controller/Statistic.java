@@ -20,10 +20,14 @@ public class Statistic implements IController {
     public void handleOpenEvent(MouseEvent event) {
         if(!tf_token.getText().isEmpty() && tf_token.getText().length() == 8) {
             if(PollImpl.getIsPollOwner(tf_token.getText())) {
-                //View Poll
+                open(tf_token.getText());
             } else AlertHelper.showError("Esta encuesta no te pertenece").showAndWait();
             hideWindow();
         } else AlertHelper.showError("Este token no es válido").showAndWait();
+    }
+
+    private void open(String token) {
+
     }
 
     @Override
