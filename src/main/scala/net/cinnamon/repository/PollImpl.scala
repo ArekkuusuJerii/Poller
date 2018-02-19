@@ -3,7 +3,7 @@ package net.cinnamon.repository
 import java.sql.Types
 
 import net.cinnamon.controller.Menu
-import net.cinnamon.entity.Kind
+import net.cinnamon.entity.Question.Kind
 import net.cinnamon.helper.SequenceHelper
 
 import scala.collection.mutable
@@ -57,7 +57,7 @@ object PollImpl {
     val in = mutable.Map(
       "text" -> text,
       "token" -> token,
-      "kind" -> (kind.ordinal() + 1)
+      "kind" -> kind.id
     )
     if(id > 0) in += "id" -> id
     SequenceHelper.call(in.toMap, Map("id" -> Types.INTEGER))("{call createQuestion(?,?,?,?)}",

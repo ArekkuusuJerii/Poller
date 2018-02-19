@@ -91,8 +91,8 @@ package helper {
       stage.show()
     }
 
-    def openFile(window: Window): Unit = {
-      val stage = StageLoader.load(classOf[Upload], "view/upload.fxml")
+    def openUpload(window: Window): Unit = {
+      val stage = StageLoader.load(classOf[Upload], "view/upload.fxml")(u => u.setParent(window))
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Crear")

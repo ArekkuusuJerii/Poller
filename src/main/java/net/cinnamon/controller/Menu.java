@@ -43,7 +43,7 @@ public class Menu implements IController {
 
     @FXML
     public void handleCreateEvent(MouseEvent event) {
-         StageHelper.openFile(lb_user.getScene().getWindow());
+         StageHelper.openUpload(lb_user.getScene().getWindow());
     }
 
     public void setEmail(String email) {

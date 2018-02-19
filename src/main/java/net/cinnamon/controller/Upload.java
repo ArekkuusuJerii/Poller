@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import net.cinnamon.entity.Poll;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
@@ -18,6 +19,7 @@ public class Upload implements IController {
 
     @FXML
     private TextField tf_file;
+    private Window parent;
     private File file;
 
     @Override
@@ -47,10 +49,14 @@ public class Upload implements IController {
             Optional<Poll> optional = new JsonFileReader<>(Poll.class, file).deserialize();
             if (optional.isPresent()) {
                 Poll poll = optional.get();
-                StageHelper.openToken(tf_file.getScene().getWindow(), poll.create());
+                StageHelper.openToken(parent, poll.create());
                 hideWindow();
             }
         } else AlertHelper.showError("No se pudo abrir el archivo").showAndWait();
+    }
+
+    public void setParent(Window parent) {
+        this.parent = parent;
     }
 
     @Override

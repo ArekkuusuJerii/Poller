@@ -34,4 +34,14 @@ public class Question {
     public void read() {
 
     }
+
+    public enum Kind {
+        SINGLE,
+        MULTIPLE,
+        OPEN;
+        
+        public int id() {
+            return ordinal() + 1;
+        }
+    }
 }
