@@ -1,6 +1,7 @@
 package net.cinnamon.utils
 
 import net.cinnamon.entity
+import net.cinnamon.entity.Question.Kind
 import net.cinnamon.entity._
 
 object PollBuilder {

@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import net.cinnamon.utils.LimitedTextField?>
 
-<AnchorPane prefHeight="150.0" prefWidth="300.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.Visualizar">
+<AnchorPane prefHeight="150.0" prefWidth="300.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.Statistic">
    <children>
       <GridPane prefHeight="150.0" prefWidth="300.0">
         <columnConstraints>

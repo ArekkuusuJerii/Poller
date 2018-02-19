@@ -14,8 +14,6 @@ package helper {
 
   import net.cinnamon.controller._
 
-  import scala.reflect.ClassTag
-
   object AlertHelper {
     def showError(text: String): Alert = {
       val alert: Alert = new Alert(Alert.AlertType.ERROR, text)
@@ -78,14 +76,14 @@ package helper {
     }
 
     def openRegister(): Unit = {
-      val stage = StageLoader.load(classOf[Registro],"view/registro.fxml")
+      val stage = StageLoader.load(classOf[Register], "view/register.fxml")
       stage.setTitle("Register")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openPoll(): Unit = {
-      val stage = StageLoader.load(classOf[Encuesta], "view/encuesta.fxml")
+      val stage = StageLoader.load(classOf[Poll], "view/poll.fxml")
       stage.setTitle("Encuesta")
       stage.centerOnScreen()
       stage.show()
@@ -101,7 +99,7 @@ package helper {
     }
 
     def openVisualize(window: Window): Unit = {
-      val stage = StageLoader.load(classOf[Visualizar], "view/visualize.fxml")
+      val stage = StageLoader.load(classOf[Statistic], "view/statistic.fxml")
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Ver Encuesta")
@@ -122,7 +120,7 @@ package helper {
   object StageLoader {
     def load[A](context: Class[A], fxml: String)(implicit f: A => Unit): Stage = load(context, new Stage, fxml)(f)
 
-    def load[A](context: Class[A], stage: Stage, fxml: String)(f: A => Unit)(implicit tag: ClassTag[A]): Stage = {
+    def load[A](context: Class[A], stage: Stage, fxml: String)(f: A => Unit): Stage = {
       getURL(context, "img/poller.png") match {
         case Some(icon) => stage.getIcons.add(new Image(icon.toExternalForm))
         case None =>
