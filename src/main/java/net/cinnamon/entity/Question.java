@@ -6,28 +6,28 @@ import net.cinnamon.repository.PollImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pregunta {
+public class Question {
 
     //transient does not save to JSON
     transient public int id;
     //Serialized
     @SerializedName("pregunta")
-    public String texto;
+    public String text;
     @SerializedName("tipo")
-    public Tipo tipo;
+    public Kind kind;
     @SerializedName("respuestas")
-    public List<Respuesta> respuestas = new ArrayList<>();
+    public List<Answer> answers = new ArrayList<>();
 
-    public Pregunta(String texto, Tipo tipo) {
-        this.texto = texto;
-        this.tipo = tipo;
+    public Question(String text, Kind kind) {
+        this.text = text;
+        this.kind = kind;
     }
 
-    public void create(Encuesta parent) {
-        int id = PollImpl.createQuestion(this.texto, this.tipo, parent.token, this.id);
+    public void create(Poll parent) {
+        int id = PollImpl.createQuestion(this.text, this.kind, parent.token, this.id);
         if(id > 0) {
             this.id = id;
-            respuestas.forEach(r -> r.create(this));
+            answers.forEach(r -> r.create(this));
         }
     }
 

@@ -1,11 +1,10 @@
 package net.cinnamon.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import net.cinnamon.entity.Encuesta;
+import net.cinnamon.entity.Poll;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
 import net.cinnamon.helper.StringHelper;
@@ -45,10 +44,10 @@ public class Upload implements IController {
     @FXML
     public void handleAcceptEvent(MouseEvent event) {
         if (file != null && file.exists() && file.isFile() && file.canRead()) {
-            Optional<Encuesta> optional = new JsonFileReader<>(Encuesta.class, file).deserialize();
+            Optional<Poll> optional = new JsonFileReader<>(Poll.class, file).deserialize();
             if (optional.isPresent()) {
-                Encuesta encuesta = optional.get();
-                StageHelper.openToken(tf_file.getScene().getWindow(), encuesta.create());
+                Poll poll = optional.get();
+                StageHelper.openToken(tf_file.getScene().getWindow(), poll.create());
                 hideWindow();
             }
         } else AlertHelper.showError("No se pudo abrir el archivo").showAndWait();

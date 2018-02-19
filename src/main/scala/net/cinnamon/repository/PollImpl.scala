@@ -3,7 +3,7 @@ package net.cinnamon.repository
 import java.sql.Types
 
 import net.cinnamon.controller.Menu
-import net.cinnamon.entity.Tipo
+import net.cinnamon.entity.Kind
 import net.cinnamon.helper.SequenceHelper
 
 import scala.collection.mutable
@@ -52,7 +52,7 @@ object PollImpl {
     token
   }
 
-  def createQuestion(text: String, kind: Tipo, token: Token)(id: Int): Int = {
+  def createQuestion(text: String, kind: Kind, token: Token)(id: Int): Int = {
     var id = -1
     val in = mutable.Map(
       "text" -> text,

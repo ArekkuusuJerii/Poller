@@ -13,7 +13,8 @@ package helper {
   import javafx.stage.{Modality, Window}
 
   import net.cinnamon.controller._
-  import net.cinnamon.entity.Encuesta
+
+  import scala.reflect.ClassTag
 
   object AlertHelper {
     def showError(text: String): Alert = {
@@ -58,40 +59,40 @@ package helper {
   }
 
   object StageHelper {
+    implicit def apply[A](a: A): Unit = {}
+
     def openLogin(email: String = ""): Unit = openLogin(new Stage(), email)
 
     def openLogin(stage: Stage, email: String): Unit = {
-      StageLoader.load(classOf[Login], stage, "view/login.fxml")(l => l.setEmail(email))
+      StageLoader.load(classOf[Login], stage, "view/login.fxml")(l => l setEmail email )
       stage.setTitle("Login")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openMenu(email: String): Unit = {
-      val stage = StageLoader.load(classOf[Menu], "view/menu.fxml")(m => {
-        m.setEmail(email)
-      })
+      val stage = StageLoader.load(classOf[Menu], "view/menu.fxml")(m => m setEmail email )
       stage.setTitle("Menu")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openRegister(): Unit = {
-      val stage = StageLoader.load(classOf[Registro], "view/registro.fxml")(() => _)
+      val stage = StageLoader.load(classOf[Registro],"view/registro.fxml")
       stage.setTitle("Register")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openPoll(): Unit = {
-      val stage = StageLoader.load(classOf[Encuesta], "view/encuesta.fxml")(() => _)
+      val stage = StageLoader.load(classOf[Encuesta], "view/encuesta.fxml")
       stage.setTitle("Encuesta")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openFile(window: Window): Unit = {
-      val stage = StageLoader.load(classOf[Upload], "view/upload.fxml")(() => _)
+      val stage = StageLoader.load(classOf[Upload], "view/upload.fxml")
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Crear")
@@ -100,7 +101,7 @@ package helper {
     }
 
     def openVisualize(window: Window): Unit = {
-      val stage = StageLoader.load(classOf[Visualizar], "view/visualize.fxml")(() => _)
+      val stage = StageLoader.load(classOf[Visualizar], "view/visualize.fxml")
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Ver Encuesta")
@@ -109,7 +110,7 @@ package helper {
     }
 
     def openToken(window: Window, token: String): Unit = {
-      val stage = StageLoader.load(classOf[Token], "view/token.fxml")(t => t.setToken(token))
+      val stage = StageLoader.load(classOf[Token],"view/token.fxml")(t => t setToken token )
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Token")
@@ -119,9 +120,9 @@ package helper {
   }
 
   object StageLoader {
-    def load[A](context: Class[A], fxml: String)(f: A => Unit): Stage = load(context, new Stage, fxml)(f)
+    def load[A](context: Class[A], fxml: String)(implicit f: A => Unit): Stage = load(context, new Stage, fxml)(f)
 
-    def load[A](context: Class[A], stage: Stage, fxml: String)(f: A => Unit): Stage = {
+    def load[A](context: Class[A], stage: Stage, fxml: String)(f: A => Unit)(implicit tag: ClassTag[A]): Stage = {
       getURL(context, "img/poller.png") match {
         case Some(icon) => stage.getIcons.add(new Image(icon.toExternalForm))
         case None =>
@@ -136,15 +137,15 @@ package helper {
               case Some(css) => scene.getStylesheets.add(css.toExternalForm)
               case None =>
             }
+            stage.setResizable(false)
             stage.setScene(scene)
+            stage.sizeToScene()
           } catch {
             case e: IOException =>
               e.printStackTrace()
           }
         case None =>
       }
-      stage.setResizable(false)
-      stage.sizeToScene()
       stage
     }
 

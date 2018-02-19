@@ -226,7 +226,7 @@ AS
   SELECT @token
 GO
 
-CREATE VIEW Questions_Poll AS SELECT E.id_pk AS token, P.id_pk AS id, P.texto AS texto, P.tipo_fk AS tipo FROM Pregunta P INNER JOIN Encuesta E ON P.encuesta_fk = E.id_pk
+CREATE VIEW Questions_Poll AS SELECT E.id_pk AS token, P.id_pk AS id, P.texto AS texto, P.tipo_fk AS kind FROM Pregunta P INNER JOIN Encuesta E ON P.encuesta_fk = E.id_pk
 
 CREATE PROCEDURE createQuestion @text VARCHAR(255), @kind INT, @token VARCHAR(8), @id INT OUT
   AS

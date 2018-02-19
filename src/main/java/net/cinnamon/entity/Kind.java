@@ -1,6 +1,6 @@
 package net.cinnamon.entity;
 
-public enum Tipo {
+public enum Kind {
     SINGLE,
     MULTIPLE,
     OPEN

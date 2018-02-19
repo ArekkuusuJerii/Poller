@@ -3,20 +3,20 @@ package net.cinnamon.entity;
 import com.google.gson.annotations.SerializedName;
 import net.cinnamon.repository.PollImpl;
 
-public class Respuesta {
+public class Answer {
 
     //transient does not save to JSON
     transient int id;
     //Serialized
     @SerializedName("respuesta")
-    public String texto;
+    public String text;
 
-    public Respuesta(String texto) {
-        this.texto = texto;
+    public Answer(String text) {
+        this.text = text;
     }
 
-    public void create(Pregunta parent) {
-        int id = PollImpl.createAnswer(this.texto, parent.id, this.id);
+    public void create(Question parent) {
+        int id = PollImpl.createAnswer(this.text, parent.id, this.id);
         if(id > 0) {
             this.id = id;
         }

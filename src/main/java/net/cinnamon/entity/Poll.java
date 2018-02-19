@@ -1,33 +1,35 @@
 package net.cinnamon.entity;
 
 import com.google.gson.annotations.SerializedName;
+import net.cinnamon.controller.Menu;
 import net.cinnamon.repository.PollImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Encuesta {
+public class Poll {
 
     //transient does not save to JSON
     transient public String token;
-    transient public int propetario;
+    transient public int owner;
     //Serialized
     @SerializedName("titulo")
-    public String titulo;
+    public String title;
     @SerializedName("activar")
-    public boolean activa;
+    public boolean active;
     @SerializedName("preguntas")
-    public List<Pregunta> preguntas = new ArrayList<>();
+    public List<Question> questions = new ArrayList<>();
 
-    public Encuesta(String titulo) {
-        this.titulo = titulo;
+    public Poll(String title) {
+        this.title = title;
     }
 
     public String create() {
-        String out = PollImpl.createPoll(this.titulo, this.activa, this.token);
+        String out = PollImpl.createPoll(this.title, this.active, this.token);
         if(!out.isEmpty()) {
             this.token = out;
-            preguntas.forEach(p -> p.create(this));
+            this.owner = Menu.getId();
+            questions.forEach(p -> p.create(this));
         }
         return token;
     }
