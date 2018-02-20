@@ -46,9 +46,14 @@ package helper {
   object StyleHelper {
     type Style = String
     val TextColor: Style = "-fx-text-fill"
+    val BorderColor: Style = "-fx-border-color"
 
     def apply(node: Node, style: Style, value: String): Unit = {
-      node.setStyle(style + ":" + value + ";")
+      val append = node.getStyle match {
+        case pre: String => pre + ";" + style + ":" + value + ";"
+        case _ => style + ":" + value + ";"
+      }
+      node.setStyle(append)
     }
 
     def apply(node: Parent, style: Style): Unit = {

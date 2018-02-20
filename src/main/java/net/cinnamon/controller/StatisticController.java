@@ -8,8 +8,7 @@ import net.cinnamon.repository.PollImpl;
 
 public class StatisticController implements IController {
 
-    @FXML
-    private TextField tf_token;
+    @FXML TextField tf_token;
 
     @Override
     public void initialize() {

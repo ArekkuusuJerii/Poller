@@ -17,8 +17,7 @@ import java.util.Optional;
 
 public class UploadController implements IController {
 
-    @FXML
-    private TextField tf_file;
+    @FXML TextField tf_file;
     private Window parent;
     private File file;
 

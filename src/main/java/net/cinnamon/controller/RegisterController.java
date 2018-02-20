@@ -12,16 +12,11 @@ import net.cinnamon.repository.RegisterImpl;
 
 public class RegisterController implements IController {
 
-    @FXML
-    public TextField tf_first_name;
-    @FXML
-    public TextField tf_second_name;
-    @FXML
-    public TextField tf_email;
-    @FXML
-    public TextField pf_password_0;
-    @FXML
-    public TextField pf_password_1;
+    @FXML TextField tf_first_name;
+    @FXML TextField tf_second_name;
+    @FXML TextField tf_email;
+    @FXML TextField pf_password_0;
+    @FXML TextField pf_password_1;
 
     @Override
     public void initialize() {

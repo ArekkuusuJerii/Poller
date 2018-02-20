@@ -14,10 +14,8 @@ import java.util.Optional;
 
 public class LoginController implements IController {
 
-    @FXML
-    private TextField tf_email;
-    @FXML
-    private PasswordField pf_password;
+    @FXML TextField tf_email;
+    @FXML PasswordField pf_password;
 
     @Override
     public void initialize() {

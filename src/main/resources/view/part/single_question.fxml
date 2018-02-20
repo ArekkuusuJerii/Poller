@@ -3,7 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -23,7 +25,7 @@
          <Insets left="5.0" right="5.0" />
       </padding>
     </Label>
-    <GridPane layoutX="14.0" layoutY="176.0" prefHeight="200.0" prefWidth="570.0" style="-fx-background-color: black;">
+    <GridPane fx:id="gp_answers" layoutX="14.0" layoutY="176.0" prefHeight="200.0" prefWidth="570.0" style="-fx-background-color: black;">
       <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       </columnConstraints>
@@ -35,11 +37,74 @@
          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <children>
-         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" />
-         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
-         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="2" />
-         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
-         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="4" />
+         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;">
+            <children>
+               <RadioButton fx:id="rb_0" layoutX="14.0" layoutY="10.0" mnemonicParsing="false">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+                  <toggleGroup>
+                     <ToggleGroup fx:id="tg_answer" />
+                  </toggleGroup>
+               </RadioButton>
+               <Label fx:id="lb_0" layoutX="39.0" layoutY="7.0" prefHeight="27.0" prefWidth="515.0" text="..." wrapText="true">
+                  <font>
+                     <Font name="Consolas" size="14.0" />
+                  </font>
+               </Label>
+            </children></Pane>
+         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+            <children>
+               <RadioButton fx:id="rb_1" layoutX="15.0" layoutY="10.0" mnemonicParsing="false" toggleGroup="$tg_answer">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </RadioButton>
+               <Label fx:id="lb_1" layoutX="40.0" layoutY="7.0" prefHeight="27.0" prefWidth="515.0" text="..." wrapText="true">
+                  <font>
+                     <Font name="Consolas" size="14.0" />
+                  </font>
+               </Label>
+            </children></Pane>
+         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="2">
+            <children>
+               <RadioButton fx:id="rb_2" layoutX="15.0" layoutY="10.0" mnemonicParsing="false" toggleGroup="$tg_answer">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </RadioButton>
+               <Label fx:id="lb_2" layoutX="40.0" layoutY="7.0" prefHeight="27.0" prefWidth="515.0" text="..." wrapText="true">
+                  <font>
+                     <Font name="Consolas" size="14.0" />
+                  </font>
+               </Label>
+            </children></Pane>
+         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+            <children>
+               <RadioButton fx:id="rb_3" layoutX="15.0" layoutY="10.0" mnemonicParsing="false" toggleGroup="$tg_answer">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </RadioButton>
+               <Label fx:id="lb_3" layoutX="40.0" layoutY="7.0" prefHeight="27.0" prefWidth="515.0" text="..." wrapText="true">
+                  <font>
+                     <Font name="Consolas" size="14.0" />
+                  </font>
+               </Label>
+            </children></Pane>
+         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="4">
+            <children>
+               <RadioButton fx:id="rb_4" layoutX="15.0" layoutY="10.0" mnemonicParsing="false" toggleGroup="$tg_answer">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </RadioButton>
+               <Label fx:id="lb_4" layoutX="40.0" layoutY="7.0" prefHeight="27.0" prefWidth="515.0" text="..." wrapText="true">
+                  <font>
+                     <Font name="Consolas" size="14.0" />
+                  </font>
+               </Label>
+            </children></Pane>
       </children>
     </GridPane>
     <Separator layoutX="14.0" layoutY="388.0" prefHeight="0.0" prefWidth="570.0" style="-fx-background-color: white;" />

@@ -5,8 +5,7 @@ import javafx.scene.control.TextField;
 
 public class TokenController {
 
-    @FXML
-    private TextField tf_token;
+    @FXML TextField tf_token;
 
     public void setToken(String token) {
         tf_token.setText(token);

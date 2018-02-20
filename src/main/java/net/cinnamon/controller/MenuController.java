@@ -13,10 +13,8 @@ public class MenuController implements IController {
     private static String email;
     private static int id;
 
-    @FXML
-    private Label lb_user;
-    @FXML
-    private TextField tf_token;
+    @FXML Label lb_user;
+    @FXML TextField tf_token;
 
     @Override
     public void initialize() {

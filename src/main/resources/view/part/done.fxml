@@ -4,9 +4,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: black;" stylesheets="@../../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: black;" stylesheets="@../../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <!-- Ignore Warning... -->
-    <Button layoutX="243.0" layoutY="21.0" mnemonicParsing="false" onMouseReleased="#handleDoneEvent" style="-fx-text-fill: red;" text="Finalizar" textFill="RED">
+    <Button layoutX="12.0" layoutY="8.0" mnemonicParsing="false" onMouseReleased="#handleDoneEvent" prefHeight="34.0" prefWidth="576.0" style="-fx-text-fill: red; -fx-background-color: #363636;" text="Finalizar" textFill="RED">
         <font>
             <Font name="Consolas" size="18.0" />
         </font>
