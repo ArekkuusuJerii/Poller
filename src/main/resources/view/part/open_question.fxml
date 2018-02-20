@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import net.cinnamon.utils.LimitedTextArea?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #353535;" stylesheets="@../../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.PollController$OpenQuestion">
+    <Label fx:id="lb_question" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="150.0" prefWidth="570.0" style="-fx-background-color: #161616;" textFill="WHITE" wrapText="true">
+        <cursor>
+          <Cursor fx:constant="DEFAULT" />
+        </cursor>
+      <font>
+         <Font name="Consolas" size="22.0" />
+      </font>
+      <padding>
+         <Insets left="5.0" right="5.0" />
+      </padding>
+    </Label>
+    <LimitedTextArea fx:id="tf_answer" layoutX="14.0" layoutY="180.0" maxLength="255" prefHeight="200.0" prefWidth="570.0" promptText="..." wrapText="true">
+      <font>
+         <Font size="18.0" />
+      </font></LimitedTextArea>
+   <Separator layoutX="14.0" layoutY="388.0" prefHeight="1.0" prefWidth="570.0" style="-fx-background-color: white;" />
+</AnchorPane>

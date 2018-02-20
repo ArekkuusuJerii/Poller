@@ -12,7 +12,10 @@ package helper {
 
   import javafx.stage.{Modality, Window}
 
+  import net.cinnamon.controller.PollController.PaneNode
   import net.cinnamon.controller._
+  import net.cinnamon.entity.Question
+  import net.cinnamon.entity.Question.Kind
 
   object AlertHelper {
     def showError(text: String): Alert = {
@@ -69,7 +72,12 @@ package helper {
     }
 
     def openMenu(email: String): Unit = {
-      val stage = StageLoader.load(classOf[MenuController], "view/menu.fxml")(m => m setEmail email )
+      val stage = StageLoader.load(classOf[MenuController], "view/menu.fxml")(m => {
+        email match {
+          case e: String if e nonEmpty => m.setEmail(e)
+          case _ => m.setEmail(MenuController.getEmail)
+        }
+      })
       stage.setTitle("Menu")
       stage.centerOnScreen()
       stage.show()
@@ -82,8 +90,8 @@ package helper {
       stage.show()
     }
 
-    def openPoll(): Unit = {
-      val stage = StageLoader.load(classOf[PollController], "view/poll.fxml")
+    def openPoll(token: String): Unit = {
+      val stage = StageLoader.load(classOf[PollController], "view/poll.fxml")(p => p.open(token))
       stage.setTitle("Encuesta")
       stage.centerOnScreen()
       stage.show()
@@ -114,6 +122,46 @@ package helper {
       stage.setTitle("Token")
       stage.centerOnScreen()
       stage.show()
+    }
+
+    def loadQuestion(list: java.util.List[PaneNode], question: Question): Parent = {
+      val view = question.kind match {
+        case Kind.SINGLE => "view/part/single_question.fxml"
+        case Kind.MULTIPLE => "view/part/multiple_question.fxml"
+        case Kind.OPEN => "view/part/open_question.fxml"
+      }
+      StageLoader.getURL(getClass, view) match {
+        case Some(layout) =>
+          try {
+            val loader = new FXMLLoader(layout)
+            val parent: Parent = loader.load()
+            val controller = loader.getController[PaneNode]
+            controller.loadQuestion(question)
+            list.add(controller)
+            return parent
+          } catch {
+            case e: IOException =>
+              e.printStackTrace()
+          }
+        case None =>
+      }
+      null
+    }
+
+    def loadDone(pollController: PollController): Parent = {
+      StageLoader.getURL(getClass, "view/part/done.fxml") match {
+        case Some(layout) =>
+          try {
+            val loader = new FXMLLoader(layout)
+            loader.setController(pollController)
+            return loader.load()
+          } catch {
+            case e: IOException =>
+              e.printStackTrace()
+          }
+        case None =>
+      }
+      null
     }
   }
 

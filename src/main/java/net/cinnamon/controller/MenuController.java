@@ -10,6 +10,7 @@ import net.cinnamon.repository.PollImpl;
 
 public class MenuController implements IController {
 
+    private static String email;
     private static int id;
 
     @FXML
@@ -31,7 +32,7 @@ public class MenuController implements IController {
     @FXML
     public void handleOpenEvent(MouseEvent event) {
         if (!tf_token.getText().isEmpty() && PollImpl.getIsPollActive(tf_token.getText())) {
-            StageHelper.openPoll();
+            StageHelper.openPoll(tf_token.getText());
             hideWindow();
         } else AlertHelper.showError("Este token no es válido").showAndWait();
     }
@@ -48,6 +49,11 @@ public class MenuController implements IController {
 
     public void setEmail(String email) {
         lb_user.setText(email);
+        MenuController.email = email;
+    }
+
+    public static String getEmail() {
+        return email;
     }
 
     protected static void setId(int id) {

@@ -34,4 +34,8 @@ public class StatisticController implements IController {
     public void hideWindow() {
         tf_token.getScene().getWindow().hide();
     }
+
+    public static class Open {
+
+    }
 }

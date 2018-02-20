@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -34,6 +35,9 @@
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626; -fx-border-color: white;">
                 <ImageView fitHeight="86.0" fitWidth="83.0" layoutX="38.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@../img/register.png" />
+               <effect>
+                  <InnerShadow />
+               </effect>
                 </ImageView>
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.columnIndex="1">
@@ -62,11 +66,7 @@
                     <Font name="Consolas" size="18.0" />
                 </font>
             </Label>
-         <Label layoutX="310.0" layoutY="8.0" style="-fx-text-fill: red;" text="* Campo requerido">
-            <font>
-               <Font size="9.0" />
-            </font>
-         </Label>
+         <Label layoutX="292.0" layoutY="6.0" style="-fx-text-fill: red;" text="* Campo requerido" />
          <Label layoutX="238.0" layoutY="72.0" style="-fx-text-fill: red;" text="*" />
          <Label layoutX="238.0" layoutY="139.0" style="-fx-text-fill: red;" text="*" />
         </Pane>
