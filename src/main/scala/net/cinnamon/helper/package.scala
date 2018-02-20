@@ -62,35 +62,35 @@ package helper {
     def openLogin(email: String = ""): Unit = openLogin(new Stage(), email)
 
     def openLogin(stage: Stage, email: String): Unit = {
-      StageLoader.load(classOf[Login], stage, "view/login.fxml")(l => l setEmail email )
+      StageLoader.load(classOf[LoginController], stage, "view/login.fxml")(l => l setEmail email )
       stage.setTitle("Login")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openMenu(email: String): Unit = {
-      val stage = StageLoader.load(classOf[Menu], "view/menu.fxml")(m => m setEmail email )
+      val stage = StageLoader.load(classOf[MenuController], "view/menu.fxml")(m => m setEmail email )
       stage.setTitle("Menu")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openRegister(): Unit = {
-      val stage = StageLoader.load(classOf[Register], "view/register.fxml")
+      val stage = StageLoader.load(classOf[RegisterController], "view/register.fxml")
       stage.setTitle("Register")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openPoll(): Unit = {
-      val stage = StageLoader.load(classOf[Poll], "view/poll.fxml")
+      val stage = StageLoader.load(classOf[PollController], "view/poll.fxml")
       stage.setTitle("Encuesta")
       stage.centerOnScreen()
       stage.show()
     }
 
     def openUpload(window: Window): Unit = {
-      val stage = StageLoader.load(classOf[Upload], "view/upload.fxml")(u => u.setParent(window))
+      val stage = StageLoader.load(classOf[UploadController], "view/upload.fxml")(u => u.setParent(window))
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Crear")
@@ -99,7 +99,7 @@ package helper {
     }
 
     def openStatistic(window: Window): Unit = {
-      val stage = StageLoader.load(classOf[Statistic], "view/statistic.fxml")
+      val stage = StageLoader.load(classOf[StatisticController], "view/statistic.fxml")
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Ver Encuesta")
@@ -108,7 +108,7 @@ package helper {
     }
 
     def openToken(window: Window, token: String): Unit = {
-      val stage = StageLoader.load(classOf[Token],"view/token.fxml")(t => t setToken token )
+      val stage = StageLoader.load(classOf[TokenController],"view/token.fxml")(t => t setToken token )
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
       stage.setTitle("Token")

@@ -1,6 +1,6 @@
 package net.cinnamon.controller;
 
-public class Poll implements IController {
+public class PollController implements IController {
 
     @Override
     public void initialize() {

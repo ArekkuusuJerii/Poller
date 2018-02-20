@@ -15,7 +15,7 @@ import net.cinnamon.utils.JsonFileReader;
 import java.io.File;
 import java.util.Optional;
 
-public class Upload implements IController {
+public class UploadController implements IController {
 
     @FXML
     private TextField tf_file;

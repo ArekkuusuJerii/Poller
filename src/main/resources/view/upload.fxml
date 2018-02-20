@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="150.0" prefWidth="300.0" stylesheets="@../css/modern_dark.css"
             xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="net.cinnamon.controller.Upload">
+            fx:controller="net.cinnamon.controller.UploadController">
     <GridPane prefHeight="150.0" prefWidth="300.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>

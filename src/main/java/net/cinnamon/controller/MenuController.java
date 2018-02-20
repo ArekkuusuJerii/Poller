@@ -8,7 +8,7 @@ import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
 import net.cinnamon.repository.PollImpl;
 
-public class Menu implements IController {
+public class MenuController implements IController {
 
     private static int id;
 
@@ -51,11 +51,11 @@ public class Menu implements IController {
     }
 
     protected static void setId(int id) {
-        Menu.id = id;
+        MenuController.id = id;
     }
 
     public static int getId() {
-        return Menu.id;
+        return MenuController.id;
     }
 
     @Override

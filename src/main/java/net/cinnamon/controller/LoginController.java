@@ -12,7 +12,7 @@ import net.cinnamon.repository.LoginImpl;
 
 import java.util.Optional;
 
-public class Login implements IController {
+public class LoginController implements IController {
 
     @FXML
     private TextField tf_email;
@@ -35,7 +35,7 @@ public class Login implements IController {
     public void handleLoginEvent(MouseEvent event) {
         Optional<Integer> optional = LoginImpl.login(tf_email.getText(), pf_password.getText());
         if (optional.isPresent()) {
-            Menu.setId(optional.get());
+            MenuController.setId(optional.get());
             StageHelper.openMenu(tf_email.getText());
             hideWindow();
         } else {

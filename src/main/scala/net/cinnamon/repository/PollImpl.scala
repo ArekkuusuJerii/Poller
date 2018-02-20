@@ -2,7 +2,7 @@ package net.cinnamon.repository
 
 import java.sql.Types
 
-import net.cinnamon.controller.Menu
+import net.cinnamon.controller.MenuController
 import net.cinnamon.entity.Question.Kind
 import net.cinnamon.entity.{Answer, Poll, Question}
 import net.cinnamon.helper.SequenceHelper
@@ -23,7 +23,7 @@ object PollImpl {
 
   def getIsPollOwner(token: Token): Boolean = {
     var out = false
-    val owner = Int.box(Menu.getId)
+    val owner = Int.box(MenuController.getId)
     SequenceHelper.call(Map("owner" -> owner, "token" -> token), Map("isOwner" -> Types.BOOLEAN))("{call getIsPollOwner(?,?,?)}",
       ->[Boolean](_, "isOwner")(out = _)
     )
@@ -32,7 +32,7 @@ object PollImpl {
 
   def createPoll(title: String, active: Boolean)(token: Token): Token = {
     var token = ""
-    val owner = Int.box(Menu.getId)
+    val owner = Int.box(MenuController.getId)
     val in = mutable.Map(
       "title" -> title,
       "owner" -> owner,

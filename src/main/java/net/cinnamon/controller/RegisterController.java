@@ -10,7 +10,7 @@ import net.cinnamon.helper.StringHelper;
 import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.RegisterImpl;
 
-public class Register implements IController {
+public class RegisterController implements IController {
 
     @FXML
     public TextField tf_first_name;

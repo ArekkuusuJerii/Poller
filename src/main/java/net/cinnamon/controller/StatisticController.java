@@ -6,7 +6,7 @@ import javafx.scene.input.MouseEvent;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.repository.PollImpl;
 
-public class Statistic implements IController {
+public class StatisticController implements IController {
 
     @FXML
     private TextField tf_token;
@@ -20,13 +20,13 @@ public class Statistic implements IController {
     public void handleOpenEvent(MouseEvent event) {
         if(!tf_token.getText().isEmpty() && tf_token.getText().length() == 8) {
             if(PollImpl.getIsPollOwner(tf_token.getText())) {
-                open(tf_token.getText());
+                open(PollImpl.readPoll(tf_token.getText()));
             } else AlertHelper.showError("Esta encuesta no te pertenece").showAndWait();
             hideWindow();
         } else AlertHelper.showError("Este token no es válido").showAndWait();
     }
 
-    private void open(String token) {
+    private void open(net.cinnamon.entity.Poll poll) {
 
     }
 
