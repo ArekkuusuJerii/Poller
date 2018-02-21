@@ -5,7 +5,7 @@ import java.sql.Types
 import net.cinnamon.controller.MenuController
 import net.cinnamon.entity.Question.Kind
 import net.cinnamon.entity.{Answer, Poll, Question}
-import net.cinnamon.helper.SequenceHelper
+import net.cinnamon.helper.SequenceHelper.call
 import net.cinnamon.repository.helper.->
 
 import scala.collection.mutable
@@ -15,7 +15,7 @@ object PollImpl {
 
   def getIsPollActive(token: Token): Boolean = {
     var out = false
-    SequenceHelper.call(Map("token" -> token), Map("active" -> Types.BOOLEAN))("{call getIsPollActive(?,?)}",
+    call(Map("token" -> token), Map("active" -> Types.BOOLEAN))("{call getIsPollActive(?,?)}",
       ->[Boolean](_, "active")(out = _)
     )
     out
@@ -28,7 +28,7 @@ object PollImpl {
       "token" -> token,
       "respondent" -> respondent
     )
-    SequenceHelper.call(in, Map("confirmation" -> Types.BOOLEAN))("{call getCanAnswerPoll(?,?,?)}",
+    call(in, Map("confirmation" -> Types.BOOLEAN))("{call getCanAnswerPoll(?,?,?)}",
       ->[Boolean](_, "confirmation")(out = _)
     )
     out
@@ -37,7 +37,7 @@ object PollImpl {
   def getIsPollOwner(token: Token): Boolean = {
     var out = false
     val owner = Int.box(MenuController.getId)
-    SequenceHelper.call(Map("owner" -> owner, "token" -> token), Map("isOwner" -> Types.BOOLEAN))("{call getIsPollOwner(?,?,?)}",
+    call(Map("owner" -> owner, "token" -> token), Map("isOwner" -> Types.BOOLEAN))("{call getIsPollOwner(?,?,?)}",
       ->[Boolean](_, "isOwner")(out = _)
     )
     out
@@ -53,7 +53,7 @@ object PollImpl {
       "term" -> term
     )
     if(token != null && token.nonEmpty) in += "token" -> token
-    SequenceHelper.call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?,?)}",
+    call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?,?)}",
       ->[String](_, "token")(token = _)
     )
     token
@@ -67,7 +67,7 @@ object PollImpl {
       "token" -> token
     )
     if(id > 0) in += "id" -> id
-    SequenceHelper.call(in.toMap, Map("id" -> Types.INTEGER))("{call createQuestion(?,?,?,?)}",
+    call(in.toMap, Map("id" -> Types.INTEGER))("{call createQuestion(?,?,?,?)}",
       ->[Int](_, "id")(id = _)
     )
     id
@@ -80,7 +80,7 @@ object PollImpl {
       "question" -> question
     )
     if(id > 0) in += "id" -> id
-    SequenceHelper.call(in.toMap, Map("id" -> Types.INTEGER))("{call createAnswer(?,?,?)}",
+    call(in.toMap, Map("id" -> Types.INTEGER))("{call createAnswer(?,?,?)}",
       ->[Int](_, "id")(id = _)
     )
     id
@@ -88,7 +88,7 @@ object PollImpl {
 
   def readPoll(token: Token): Poll = {
     def readAnswer(question: Question): Unit = {
-      SequenceHelper.call(Map("question" -> question.id), Map.empty)("{call getAnswer(?)}",
+      call(Map("question" -> question.id), Map.empty)("{call getAnswer(?)}",
         map => {
           val answer: Answer = new Answer
           ->[Int](map, "id")(answer.id = _)
@@ -99,7 +99,7 @@ object PollImpl {
     }
 
     def readQuestion(poll: Poll): Unit = {
-      SequenceHelper.call(Map("token" -> poll.token), Map.empty)("{call getQuestion(?)}",
+      call(Map("token" -> poll.token), Map.empty)("{call getQuestion(?)}",
         map => {
           val question: Question = new Question
           ->[Int](map, "id")(question.id = _)
@@ -114,7 +114,7 @@ object PollImpl {
     }
 
     var poll: Poll = null
-    SequenceHelper.call(Map("token" -> token), Map("title" -> Types.VARCHAR, "active" -> Types.BOOLEAN, "term" -> Types.VARCHAR))("{call getPoll(?,?,?,?)}",
+    call(Map("token" -> token), Map("title" -> Types.VARCHAR, "active" -> Types.BOOLEAN, "term" -> Types.VARCHAR))("{call getPoll(?,?,?,?)}",
       map => {
         poll = new Poll
         ->[String](map, "title")(poll.title = _)
@@ -135,7 +135,7 @@ object PollImpl {
       "token" -> poll.token,
       "term" -> poll.term
     )
-    SequenceHelper.call(in, Map("id" -> Types.INTEGER))("{call savePoll(?,?,?,?)}",
+    call(in, Map("id" -> Types.INTEGER))("{call savePoll(?,?,?,?)}",
       ->[Int](_, "id")(id = _)
     )
     id
@@ -148,7 +148,7 @@ object PollImpl {
       "question" -> question.id,
       "answer" -> answer.id
     )
-    SequenceHelper.call(in, Map.empty)("{call saveAnswerSelection(?,?,?,?)}", _ => Unit)
+    call(in, Map.empty)("{call saveAnswerSelection(?,?,?,?)}", _ => Unit)
   }
 
   def saveAnswerInput(token: Token, application: Int, question: Question, answer: String): Unit = {
@@ -158,6 +158,6 @@ object PollImpl {
       "question" -> question.id,
       "answer" -> answer
     )
-    SequenceHelper.call(in, Map.empty)("{call saveAnswerInput(?,?,?,?)}", _ => Unit)
+    call(in, Map.empty)("{call saveAnswerInput(?,?,?,?)}", _ => Unit)
   }
 }

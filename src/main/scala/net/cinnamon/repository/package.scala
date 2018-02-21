@@ -5,7 +5,7 @@ package repository {
   import java.sql.Types
   import java.util.Optional
 
-  import net.cinnamon.helper.SequenceHelper
+  import net.cinnamon.helper.SequenceHelper.call
   import net.cinnamon.repository.helper.->
 
   import scala.reflect.ClassTag
@@ -20,7 +20,7 @@ package repository {
   object LoginImpl {
     def login(user: String, password: String): Optional[Integer] = {
       var option: Optional[Integer] = Optional.empty()
-      SequenceHelper.call(Map("email" -> user, "password" -> password), Map("login" -> Types.INTEGER))("{call login(?,?,?)}",
+      call(Map("email" -> user, "password" -> password), Map("login" -> Types.INTEGER))("{call login(?,?,?)}",
         ->[Int](_, "login")(any => {
           option = Optional.of(any)
         })
@@ -38,7 +38,7 @@ package repository {
         "email" -> email,
         "password" -> password
       )
-      SequenceHelper.call(in, Map("success" -> Types.BOOLEAN))("{call register(?,?,?,?,?)}",
+      call(in, Map("success" -> Types.BOOLEAN))("{call register(?,?,?,?,?)}",
         ->[Boolean](_, "success")(out = _)
       )
       out
@@ -46,7 +46,7 @@ package repository {
 
     def canCreateAccount(email: String): Boolean = {
       var out = false
-      SequenceHelper.call(Map("email" -> email), Map("confirm" -> Types.BOOLEAN))("{call canCreateAccount(?,?)}",
+      call(Map("email" -> email), Map("confirm" -> Types.BOOLEAN))("{call canCreateAccount(?,?)}",
         ->[Boolean](_, "confirm")(out = _)
       )
       out
