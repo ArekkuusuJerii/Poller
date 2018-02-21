@@ -21,6 +21,19 @@ object PollImpl {
     out
   }
 
+  def getCanAnswerPoll(token: Token): Boolean = {
+    var out = false
+    val respondent = Int.box(MenuController.getId)
+    val in = Map(
+      "token" -> token,
+      "respondent" -> respondent
+    )
+    SequenceHelper.call(in, Map("confirmation" -> Types.BOOLEAN))("{call getCanAnswerPoll(?,?,?)}",
+      ->[Boolean](_, "confirmation")(out = _)
+    )
+    out
+  }
+
   def getIsPollOwner(token: Token): Boolean = {
     var out = false
     val owner = Int.box(MenuController.getId)
@@ -116,9 +129,9 @@ object PollImpl {
 
   def savePoll(poll: Poll): Int = {
     var id = -1
-    val owner = Int.box(MenuController.getId)
+    val respondent = Int.box(MenuController.getId)
     val in = Map(
-      "respondent" -> owner,
+      "respondent" -> respondent,
       "token" -> poll.token,
       "term" -> poll.term
     )
@@ -128,23 +141,23 @@ object PollImpl {
     id
   }
 
-  def saveSelection(token: Token, application: Int, question: Question, answer: Answer): Unit = {
+  def saveAnswerSelection(token: Token, application: Int, question: Question, answer: Answer): Unit = {
     val in = Map(
       "application" -> application,
       "token" -> token,
       "question" -> question,
       "answer" -> answer.id
     )
-    SequenceHelper.call(in, Map.empty)("{call saveSelection(?,?,?,?)}", _ => Unit)
+    SequenceHelper.call(in, Map.empty)("{call saveAnswerSelection(?,?,?,?)}", _ => Unit)
   }
 
-  def saveAnswer(token: Token, application: Int, question: Question, answer: String): Unit = {
+  def saveAnswerInput(token: Token, application: Int, question: Question, answer: String): Unit = {
     val in = Map(
       "application" -> application,
       "token" -> token,
       "question" -> question,
       "answer" -> answer
     )
-    SequenceHelper.call(in, Map.empty)("{call saveAnswer(?,?,?,?)}", _ => Unit)
+    SequenceHelper.call(in, Map.empty)("{call saveAnswerInput(?,?,?,?)}", _ => Unit)
   }
 }

@@ -63,6 +63,7 @@ public class PollController implements IController {
         int application = PollImpl.savePoll(poll);
         if(application != -1) {
             nodes.forEach(n -> n.save(poll.token, application));
+            AlertHelper.showInformation("Ha contestado la encuesta satisfactoriamente").showAndWait();
         } else {
             AlertHelper.showError("No es posible contestar la encuesta").showAndWait();
         }
