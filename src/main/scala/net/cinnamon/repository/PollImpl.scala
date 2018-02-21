@@ -145,7 +145,7 @@ object PollImpl {
     val in = Map(
       "application" -> application,
       "token" -> token,
-      "question" -> question,
+      "question" -> question.id,
       "answer" -> answer.id
     )
     SequenceHelper.call(in, Map.empty)("{call saveAnswerSelection(?,?,?,?)}", _ => Unit)
@@ -155,7 +155,7 @@ object PollImpl {
     val in = Map(
       "application" -> application,
       "token" -> token,
-      "question" -> question,
+      "question" -> question.id,
       "answer" -> answer
     )
     SequenceHelper.call(in, Map.empty)("{call saveAnswerInput(?,?,?,?)}", _ => Unit)
