@@ -382,7 +382,7 @@ CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(7), 
   SELECT @id
 GO
 
-CREATE PROCEDURE dropAll -- Purge All
+CREATE PROCEDURE dropAll -- Purge All OOF
   AS
   DELETE FROM dbo.Respuesta_Seleccion
   DELETE FROM dbo.Respuesta_Abierta
@@ -390,4 +390,20 @@ CREATE PROCEDURE dropAll -- Purge All
   DELETE FROM dbo.Pregunta_Respuesta
   DELETE FROM dbo.Pregunta
   DELETE FROM dbo.Encuesta
+GO
+
+CREATE PROCEDURE getSelectionStatistics @token VARCHAR(8), @question INT, @term VARCHAR(7)
+  AS
+  SELECT A.respuesta, count(A.respuesta) FROM Survey S --Select from Surveys by Respondents
+    INNER JOIN AnswerSelection AA ON AA.aplicacion = S.id --By matching id
+    INNER JOIN Answer A ON AA.respuesta = A.id --The Answer text and count
+    WHERE S.token = @token AND S.periodo = @term --That match a token and a term
+  GROUP BY A.respuesta --Counting by each answer
+GO
+
+CREATE PROCEDURE getInputStatistics @token VARCHAR(8), @question INT, @term VARCHAR(7)
+  AS
+  SELECT AI.respuesta FROM Survey S --Select from Surveys by Respondents
+    INNER JOIN AnswerInput AI ON S.id = AI.aplicacion --By matching id, the Answer text
+  WHERE S.token = @token AND S.periodo = @term AND AI.pregunta = @question --That match a token, a term and a question
 GO

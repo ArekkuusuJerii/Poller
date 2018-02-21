@@ -15,7 +15,7 @@ object StatisticImpl {
       "question" -> question.id,
       "term" -> term
     )
-    call(in, Map.empty)("{call getSelectionStatistics(?,?)}",
+    call(in, Map.empty)("{call getSelectionStatistics(?,?,?)}",
       map => {
         var answer: String = ""
         var amount: Int = 0
@@ -27,13 +27,14 @@ object StatisticImpl {
     buf
   }
 
-  def getInputStatistics(token: Token, question: Question): ArrayBuffer[String] = {
+  def getInputStatistics(term: String, token: Token, question: Question): ArrayBuffer[String] = {
     val buf: ArrayBuffer[String] = ArrayBuffer()
     val in = Map(
       "token" -> token,
-      "question" -> question.id
+      "question" -> question.id,
+      "term" -> term
     )
-    call(in, Map.empty)("{call getInputStatistics(?,?)}", ->[String](_, "answer")(answer => buf += answer))
+    call(in, Map.empty)("{call getInputStatistics(?,?,?)}", ->[String](_, "answer")(answer => buf += answer))
     buf
   }
 }

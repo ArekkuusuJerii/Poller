@@ -1,5 +1,6 @@
 package net.cinnamon.controller;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -30,12 +31,14 @@ public class StatisticController implements IController {
 
     }
 
+    @FXML
+    private void handleSaveEvent(Event event) {
+
+    }
+
     @Override
     public void hideWindow() {
         tf_token.getScene().getWindow().hide();
     }
 
-    public static class Open {
-
-    }
 }
