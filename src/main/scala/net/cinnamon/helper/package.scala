@@ -10,7 +10,7 @@ import javafx.stage.Stage
 
 package helper {
 
-  import javafx.scene.control.TextInputDialog
+  import javafx.scene.control.{Label, TextInputDialog}
   import javafx.stage.{Modality, Window}
 
   import net.cinnamon.controller.PollController.PaneNode
@@ -59,6 +59,7 @@ package helper {
     val TextFont: Style = "-fx-font"
     val TextColor: Style = "-fx-text-fill"
     val BorderColor: Style = "-fx-border-color"
+    val BackgroundColor: Style = "-fx-background-color"
 
     def apply(node: Node, style: Style, value: String): Unit = {
       val append = node.getStyle match {
@@ -178,6 +179,24 @@ package helper {
             val controller = loader.getController[Statistic]
             controller.load(token, term, question)
             return parent
+          } catch {
+            case e: IOException =>
+              e.printStackTrace()
+          }
+        case None =>
+      }
+      null
+    }
+
+    def loadInput(text: String): Parent = {
+      StageLoader.getURL(getClass, "view/part/statistic_input.fxml") match {
+        case Some(layout) =>
+          try {
+            val loader = new FXMLLoader(layout)
+            val parent: Parent = loader.load()
+            val label: Label = parent.lookup("#lb_text").asInstanceOf[Label]
+            label.setText(text)
+            return parent;
           } catch {
             case e: IOException =>
               e.printStackTrace()

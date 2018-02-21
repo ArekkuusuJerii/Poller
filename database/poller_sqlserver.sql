@@ -415,5 +415,5 @@ GO
 
 CREATE PROCEDURE getPollInfo @token VARCHAR(8)
   AS
-  SELECT cast(titulo AS NVARCHAR) AS title, periodo AS term, activa AS active FROM Poll WHERE token = @token
+  SELECT titulo AS title, periodo AS term, activa AS active FROM Poll WHERE token = @token
 GO

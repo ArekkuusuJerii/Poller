@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -11,6 +12,7 @@ import net.cinnamon.entity.Poll;
 import net.cinnamon.entity.Question;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
+import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.PollImpl;
 import net.cinnamon.repository.StatisticImpl;
 import scala.Tuple3;
@@ -45,18 +47,19 @@ public class StatisticController implements IController {
             }
         });
         cb_active.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(poll != null) {
+            if(poll != null && poll.active != newValue) {
                 if (!newValue) {
                     poll.active = newValue;
                     poll.overwrite();
                 } else {
                     String term = choice_box.getSelectionModel().getSelectedItem();
                     AlertHelper.showTextInput("Introduce nuevo periodo", "Periodo").ifPresent(newTerm -> {
-                        if (!term.equalsIgnoreCase(newTerm)) {
+                        if (!poll.term.equalsIgnoreCase(newTerm)) {
                             poll.term = newTerm;
                             poll.overwrite();
                         }
                     });
+                    cb_active.setSelected(poll.active);
                 }
             }
         });
@@ -146,10 +149,16 @@ public class StatisticController implements IController {
     public static class InputStatistic implements Statistic {
 
         @FXML Label lb_text;
+        @FXML ScrollPane scroll_node;
 
         @Override
         public void load(String token, String term, Question question) {
             lb_text.setText(question.text);
+            VBox box = new VBox();
+            StatisticImpl.getInputStatistics(term, token, question).forEach(text -> {
+                box.getChildren().addAll(StageHelper.loadInput(text));
+            });
+            scroll_node.setContent(box);
         }
     }
 }
