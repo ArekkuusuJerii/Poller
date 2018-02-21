@@ -5,20 +5,20 @@ GO
 
 CREATE TABLE Respondiente (
   id_pk INT NOT NULL IDENTITY ,
-  firstName VARCHAR(45) NOT NULL ,
-  secondName VARCHAR(255) NOT NULL ,
+  firstName NVARCHAR(45) NOT NULL ,
+  secondName NVARCHAR(255) NOT NULL ,
   email VARCHAR(45) NOT NULL UNIQUE ,
-  password VARCHAR(45) NOT NULL ,
+  password NVARCHAR(45) NOT NULL ,
   PRIMARY KEY (id_pk)
 );
 GO
 
 CREATE TABLE Encuesta (
   id_pk VARCHAR(8) NOT NULL UNIQUE ,
-  titulo VARCHAR(45) NOT NULL ,
+  titulo NVARCHAR(45) NOT NULL ,
   activa BIT NOT NULL ,
   propietario_fk INT NOT NULL ,
-  periodo VARCHAR(7) NOT NULL ,
+  periodo NVARCHAR(45) NOT NULL ,
   PRIMARY KEY (id_pk) ,
   FOREIGN KEY (propietario_fk) REFERENCES Respondiente(id_pk)
 );
@@ -26,7 +26,7 @@ GO
 
 CREATE TABLE Aplicacion (
   id_pk INT NOT NULL IDENTITY ,
-  periodo VARCHAR(7) NOT NULL ,
+  periodo NVARCHAR(45) NOT NULL ,
   fecha DATETIME NOT NULL ,
   respondiente_fk INT NOT NULL ,
   encuesta_fk VARCHAR(8) NOT NULL ,
@@ -45,8 +45,8 @@ GO
 
 CREATE TABLE Pregunta (
   id_pk INT NOT NULL IDENTITY ,
-  texto VARCHAR(255) NOT NULL ,
-  encuesta_fk VARCHAR(8) NOT NULL ,
+  texto NVARCHAR(255) NOT NULL ,
+  encuesta_fk NVARCHAR(8) NOT NULL ,
   tipo_fk INT NOT NULL ,
   PRIMARY KEY (id_pk) ,
   FOREIGN KEY (encuesta_fk) REFERENCES Encuesta(id_pk) ,
@@ -56,7 +56,7 @@ GO
 
 CREATE TABLE Pregunta_Respuesta (
   id_pk INT NOT NULL IDENTITY ,
-  respuesta VARCHAR(255) NOT NULL ,
+  respuesta NVARCHAR(255) NOT NULL ,
   pregunta_fk INT NOT NULL ,
   PRIMARY KEY (id_pk) ,
   FOREIGN KEY (pregunta_fk) REFERENCES Pregunta(id_pk)
@@ -74,7 +74,7 @@ CREATE TABLE Respuesta_Seleccion (
 GO
 
 CREATE TABLE Respuesta_Abierta (
-  respuesta VARCHAR(255) NOT NULL ,
+  respuesta NVARCHAR(255) NOT NULL ,
   pregunta_fk INT NOT NULL ,
   aplicacion_fk INT NOT NULL ,
   FOREIGN KEY (pregunta_fk) REFERENCES Pregunta(id_pk) ,
@@ -104,16 +104,19 @@ CREATE PROCEDURE test_out @value INT OUT
   SELECT @value = 2688164;
 GO*/
 
-CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login INT OUT
+CREATE VIEW Respondent AS SELECT id_pk AS id, firstName, secondName, email, password FROM Respondiente;
+GO
+
+CREATE PROCEDURE login @email VARCHAR(45), @password NVARCHAR(45), @login INT OUT
   AS
   --Check for match
   SELECT @login = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk
 GO
 
-CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @email VARCHAR(45), @password VARCHAR(45), @success BIT OUT
+CREATE PROCEDURE register @firstName NVARCHAR(45), @secondName NVARCHAR(45), @email VARCHAR(45), @password NVARCHAR(45), @success BIT OUT
   AS
   --Insert values
-  INSERT INTO Respondiente VALUES (@firstName, @secondName, @email, @password)
+  INSERT INTO Respondent(firstName, secondName, email, password) VALUES (@firstName, @secondName, @email, @password)
   --Confirm Insert
   IF @@ROWCOUNT = 1
       SET @success = 1
@@ -194,7 +197,7 @@ AS
   SELECT @token
 GO
 
-CREATE PROCEDURE createPoll @title VARCHAR(45), @owner INT, @active BIT, @term VARCHAR(7), @token VARCHAR(8) OUT
+CREATE PROCEDURE createPoll @title NVARCHAR(45), @owner INT, @active BIT, @term NVARCHAR(45), @token VARCHAR(8) OUT
 AS
   --Check for existence
   IF exists(SELECT * FROM Poll WHERE propietario = @owner AND token = @token)
@@ -222,7 +225,7 @@ GO
 CREATE VIEW Question AS SELECT id_pk AS id, texto, encuesta_fk AS token, tipo_fk AS tipo FROM Pregunta
 GO
 
-CREATE PROCEDURE createQuestion @text VARCHAR(255), @kind INT, @token VARCHAR(8), @id INT OUT
+CREATE PROCEDURE createQuestion @text NVARCHAR(255), @kind INT, @token VARCHAR(8), @id INT OUT
   AS
   --Check for existence
   IF exists(SELECT * FROM Question WHERE id = @id)
@@ -247,7 +250,7 @@ GO
 CREATE VIEW Answer AS SELECT id_pk AS id, respuesta AS respuesta, pregunta_fk AS pregunta FROM Pregunta_Respuesta
 GO
 
-CREATE PROCEDURE createAnswer @answer VARCHAR(255), @question INT, @id INT OUT
+CREATE PROCEDURE createAnswer @answer NVARCHAR(255), @question INT, @id INT OUT
   AS
   --Check if the question is not Open
   IF NOT exists(SELECT * FROM Question WHERE id = @question AND tipo = 3)
@@ -273,7 +276,7 @@ GO
 CREATE VIEW Poll_Question_Answer AS SELECT P.token AS token, Q.id AS question, A.id AS answer FROM Poll P INNER JOIN Poll_Questions Q ON P.token = Q.token LEFT JOIN Question_Answer A ON A.pregunta = Q.id
 GO
 
-CREATE PROCEDURE getPoll @token VARCHAR(8), @title VARCHAR(45) OUT, @active BIT OUT, @term VARCHAR(7) OUT
+CREATE PROCEDURE getPoll @token VARCHAR(8), @title NVARCHAR(45) OUT, @active BIT OUT, @term NVARCHAR(45) OUT
   AS
   SELECT @title = titulo, @active = activa, @term = periodo FROM Poll WHERE token = @token
 GO
@@ -301,7 +304,7 @@ CREATE PROCEDURE getCanAnswerPoll @respondent INT, @token VARCHAR(8), @confirmat
   SELECT @confirmation
 GO
 
-CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(3), @id INT OUT
+CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term NVARCHAR(45), @id INT OUT
   AS
   DECLARE @active BIT
   --Check if it is active
@@ -351,7 +354,7 @@ CREATE PROCEDURE saveAnswerSelection @application INT, @question INT, @token VAR
       END
 GO
 
-CREATE PROCEDURE saveAnswerInput @application INT, @token VARCHAR(8), @question INT, @answer VARCHAR(255)
+CREATE PROCEDURE saveAnswerInput @application INT, @token VARCHAR(8), @question INT, @answer NVARCHAR(255)
   AS
   DECLARE @active INT
   EXEC getIsPollActive @token, @active = @active OUT
@@ -361,7 +364,7 @@ CREATE PROCEDURE saveAnswerInput @application INT, @token VARCHAR(8), @question 
       END
 GO
 
-CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(7), @id INT OUT
+CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term NVARCHAR(45), @id INT OUT
   AS
   DECLARE @active BIT
   --Check if it is active
@@ -392,7 +395,7 @@ CREATE PROCEDURE dropAll -- Purge All OOF
   DELETE FROM dbo.Encuesta
 GO
 
-CREATE PROCEDURE getSelectionStatistics @token VARCHAR(8), @question INT, @term VARCHAR(7)
+CREATE PROCEDURE getSelectionStatistics @token VARCHAR(8), @question INT, @term NVARCHAR(45)
   AS
   SELECT A.respuesta, count(A.respuesta) FROM Survey S --Select from Surveys by Respondents
     INNER JOIN AnswerSelection AA ON AA.aplicacion = S.id --By matching id
@@ -401,7 +404,7 @@ CREATE PROCEDURE getSelectionStatistics @token VARCHAR(8), @question INT, @term 
   GROUP BY A.respuesta --Counting by each answer
 GO
 
-CREATE PROCEDURE getInputStatistics @token VARCHAR(8), @question INT, @term VARCHAR(7)
+CREATE PROCEDURE getInputStatistics @token VARCHAR(8), @question INT, @term NVARCHAR(7)
   AS
   SELECT AI.respuesta FROM Survey S --Select from Surveys by Respondents
     INNER JOIN AnswerInput AI ON S.id = AI.aplicacion --By matching id, the Answer text

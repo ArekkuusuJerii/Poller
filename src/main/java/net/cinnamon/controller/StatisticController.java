@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -12,7 +11,6 @@ import net.cinnamon.entity.Poll;
 import net.cinnamon.entity.Question;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
-import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.PollImpl;
 import net.cinnamon.repository.StatisticImpl;
 import scala.Tuple3;
@@ -52,7 +50,6 @@ public class StatisticController implements IController {
                     poll.active = newValue;
                     poll.overwrite();
                 } else {
-                    String term = choice_box.getSelectionModel().getSelectedItem();
                     AlertHelper.showTextInput("Introduce nuevo periodo", "Periodo").ifPresent(newTerm -> {
                         if (!poll.term.equalsIgnoreCase(newTerm)) {
                             poll.term = newTerm;
@@ -60,6 +57,7 @@ public class StatisticController implements IController {
                         }
                     });
                     cb_active.setSelected(poll.active);
+                    setTerms();
                 }
             }
         });
