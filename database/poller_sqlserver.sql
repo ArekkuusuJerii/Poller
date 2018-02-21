@@ -382,3 +382,12 @@ CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(3), 
   SELECT @id
 GO
 
+CREATE PROCEDURE dropAll -- Purge All
+  AS
+  DELETE FROM dbo.Respuesta_Seleccion
+  DELETE FROM dbo.Respuesta_Abierta
+  DELETE FROM dbo.Aplicacion
+  DELETE FROM dbo.Pregunta_Respuesta
+  DELETE FROM dbo.Pregunta
+  DELETE FROM dbo.Encuesta
+GO
