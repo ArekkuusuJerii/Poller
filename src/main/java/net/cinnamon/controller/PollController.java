@@ -129,7 +129,7 @@ public class PollController implements IController {
 
         @Override
         public void save(String token, int application) {
-            PollImpl.saveAnswer(token, application, question, tf_answer.getText());
+            PollImpl.saveAnswerInput(token, application, question, tf_answer.getText());
         }
     }
 
@@ -178,6 +178,7 @@ public class PollController implements IController {
                     toggles.get(i).setUserData(answer);
                     label.setText(answer.text);
                 } else {
+                    gp_answers.getChildren().get(i).setVisible(false);
                     button.setDisable(true);
                     button.setVisible(false);
                     label.setDisable(true);
@@ -199,7 +200,7 @@ public class PollController implements IController {
 
         @Override
         public void save(String token, int application) {
-            PollImpl.saveSelection(token, application, question, (Answer) tg_answer.getSelectedToggle().getUserData());
+            PollImpl.saveAnswerSelection(token, application, question, (Answer) tg_answer.getSelectedToggle().getUserData());
         }
     }
 
@@ -248,6 +249,7 @@ public class PollController implements IController {
                     label.setText(answer.text);
                     button.setUserData(answer);
                 } else {
+                    gp_answers.getChildren().get(i).setVisible(false);
                     button.setDisable(true);
                     button.setVisible(false);
                     label.setDisable(true);
@@ -271,7 +273,7 @@ public class PollController implements IController {
         public void save(String token, int application) {
             list.stream().map(Pair::getKey).filter(CheckBox::isSelected)
                     .map(b -> (Answer) b.getUserData())
-                    .forEach(answer -> PollImpl.saveSelection(token, application, question, answer));
+                    .forEach(answer -> PollImpl.saveAnswerSelection(token, application, question, answer));
         }
     }
 }
