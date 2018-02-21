@@ -361,7 +361,7 @@ CREATE PROCEDURE saveAnswerInput @application INT, @token VARCHAR(8), @question 
       END
 GO
 
-CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(3), @id INT OUT
+CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(7), @id INT OUT
   AS
   DECLARE @active BIT
   --Check if it is active
