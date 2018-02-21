@@ -18,14 +18,15 @@ CREATE TABLE Encuesta (
   titulo VARCHAR(45) NOT NULL ,
   activa BIT NOT NULL ,
   propietario_fk INT NOT NULL ,
+  periodo VARCHAR(7) NOT NULL ,
   PRIMARY KEY (id_pk) ,
   FOREIGN KEY (propietario_fk) REFERENCES Respondiente(id_pk)
 );
 GO
 
 CREATE TABLE Aplicacion (
-  id_pk VARCHAR(8) NOT NULL UNIQUE ,
-  periodo VARCHAR(3) NOT NULL ,
+  id_pk INT NOT NULL IDENTITY ,
+  periodo VARCHAR(7) NOT NULL ,
   fecha DATETIME NOT NULL ,
   respondiente_fk INT NOT NULL ,
   encuesta_fk VARCHAR(8) NOT NULL ,
@@ -65,7 +66,7 @@ GO
 CREATE TABLE Respuesta_Seleccion (
   id_pk INT NOT NULL IDENTITY ,
   pregunta_respuesta_fk INT NOT NULL ,
-  aplicacion_fk VARCHAR(8) NOT NULL ,
+  aplicacion_fk INT NOT NULL ,
   PRIMARY KEY (id_pk) ,
   FOREIGN KEY (pregunta_respuesta_fk) REFERENCES Pregunta_Respuesta(id_pk) ,
   FOREIGN KEY (aplicacion_fk) REFERENCES Aplicacion(id_pk) ,
@@ -75,7 +76,7 @@ GO
 CREATE TABLE Respuesta_Abierta (
   respuesta VARCHAR(255) NOT NULL ,
   pregunta_fk INT NOT NULL ,
-  aplicacion_fk VARCHAR(8) NOT NULL ,
+  aplicacion_fk INT NOT NULL ,
   FOREIGN KEY (pregunta_fk) REFERENCES Pregunta(id_pk) ,
   FOREIGN KEY (aplicacion_fk) REFERENCES Aplicacion(id_pk)
 );
@@ -105,16 +106,8 @@ GO*/
 
 CREATE PROCEDURE login @email VARCHAR(45), @password VARCHAR(45), @login INT OUT
   AS
-  --Declare variable
-  DECLARE @id INT
   --Check for match
-  IF exists(SELECT @id = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk)
-      BEGIN
-        SET @login = @id
-      END
-  ELSE SET @login = -1
-  --Send confirmation
-  SELECT @login
+  SELECT @login = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk
 GO
 
 CREATE PROCEDURE register @firstName VARCHAR(45), @secondName VARCHAR(45), @email VARCHAR(45), @password VARCHAR(45), @success BIT OUT
@@ -142,13 +135,13 @@ CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
   SELECT @confirm
 GO
 
-CREATE VIEW Poll AS SELECT E.id_pk AS token, E.titulo AS titulo, E.activa AS activa, R.id_pk AS propetario FROM Encuesta E LEFT JOIN Respondiente R ON E.propietario_fk = R.id_pk;
+CREATE VIEW Poll AS SELECT E.id_pk AS token, E.titulo AS titulo, E.activa AS activa, E.periodo AS periodo, R.id_pk AS propetario FROM Encuesta E LEFT JOIN Respondiente R ON E.propietario_fk = R.id_pk;
 GO
 
 CREATE PROCEDURE getIsPollActive @token VARCHAR(8), @active BIT OUT
   AS
   --Check for existence
-  IF exists(SELECT id_pk FROM Active_Polls WHERE id_pk = @token)
+  IF exists(SELECT token FROM Poll WHERE activa = 1 AND token = @token)
       BEGIN
         SET @active = 1
       END
@@ -160,7 +153,7 @@ GO
 CREATE PROCEDURE getIsPollOwner @owner INT, @token VARCHAR(8), @isOwner BIT OUT
   AS
   --Check for existence
-  IF exists(SELECT * FROM Poll_Owners WHERE propetario = @owner AND token = @token)
+  IF exists(SELECT * FROM Poll WHERE propetario = @owner AND token = @token)
       BEGIN
         SET @isOwner = 1
       END
@@ -190,7 +183,7 @@ AS
       BEGIN
         SET @count = 0
         --Check for non existence
-        IF NOT exists(SELECT * FROM Poll_Owners WHERE token = @generated)
+        IF NOT exists(SELECT * FROM Poll WHERE token = @generated)
           BEGIN
             SET @token = @generated
             SET @unique = 1
@@ -201,13 +194,13 @@ AS
   SELECT @token
 GO
 
-CREATE PROCEDURE createPoll @title VARCHAR(45), @owner INT, @active BIT, @token VARCHAR(8) OUT
+CREATE PROCEDURE createPoll @title VARCHAR(45), @owner INT, @active BIT, @term VARCHAR(7), @token VARCHAR(8) OUT
 AS
   --Check for existence
   IF exists(SELECT * FROM Poll WHERE propetario = @owner AND token = @token)
     BEGIN
       --Update Poll
-      UPDATE Encuesta SET titulo = @title, activa = @active WHERE propietario_fk = @owner AND id_pk = @token
+      UPDATE Encuesta SET titulo = @title, activa = @active, periodo = @term WHERE propietario_fk = @owner AND id_pk = @token
     END
   ELSE
     BEGIN
@@ -217,7 +210,7 @@ AS
       IF @generatedToken IS NOT NULL
         BEGIN
           --Insert values
-          INSERT INTO Encuesta VALUES (@generatedToken, @title, @active, @owner)
+          INSERT INTO Encuesta VALUES (@generatedToken, @title, @active, @owner, @term)
           SET @token = @generatedToken;
         END
     END
@@ -274,9 +267,9 @@ GO
 CREATE VIEW Poll_Question_Answer AS SELECT P.token AS token, Q.id AS question, A.id AS answer FROM Poll P INNER JOIN Poll_Questions Q ON P.token = Q.token LEFT JOIN Question_Answer A ON A.pregunta = Q.id
 GO
 
-CREATE PROCEDURE getPoll @token VARCHAR(8), @title VARCHAR(45) OUT
+CREATE PROCEDURE getPoll @token VARCHAR(8), @title VARCHAR(45) OUT, @active BIT OUT, @term VARCHAR(7) OUT
   AS
-  SELECT @title = title FROM Active_Polls WHERE token = @token
+  SELECT @title = titulo, @active = activa, @term = periodo FROM Poll WHERE token = @token
 GO
 
 CREATE PROCEDURE getQuestion @token VARCHAR(8)
@@ -288,3 +281,98 @@ CREATE PROCEDURE getAnswer @question INT
   AS
   SELECT id, respuesta FROM Question_Answer WHERE pregunta = @question
 GO
+
+CREATE PROCEDURE canSavePoll @token VARCHAR(8), @term VARCHAR(7), @respondent INT, @active BIT OUT
+AS
+  IF NOT exists(SELECT * FROM Aplicacion WHERE respondiente_fk = @respondent AND encuesta_fk = @token AND periodo = @term)
+    BEGIN
+      SET @active = 1
+    END
+  ELSE
+    BEGIN
+      SET @active = 0
+    END
+  SELECT @active
+GO
+
+CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(3), @id INT OUT
+  AS
+  DECLARE @active BIT
+  --Check if it is active
+  EXEC getIsPollActive @token, @active = @active
+  IF @active = 1
+      BEGIN
+        --Check if it can be answered
+        EXEC canSavePoll @token, @term, @respondent, @active = @active
+        IF @active = 1
+          BEGIN
+            --Insert values
+             INSERT INTO Aplicacion VALUES (@term, sysdatetime(), @respondent, @token)
+             --Confirm Insert
+            IF @@ROWCOUNT = 1
+              SET @id = scope_identity()
+          END
+      END
+  SELECT @id
+GO
+
+CREATE VIEW Selections AS SELECT aplicacion_fk AS aplicacion, pregunta_respuesta_fk AS respuesta FROM Respuesta_Seleccion
+GO
+
+CREATE VIEW Answers AS SELECT aplicacion_fk AS aplicacion, pregunta_fk AS pregunta, respuesta AS respuesta FROM Respuesta_Abierta
+GO
+
+CREATE PROCEDURE saveSelection @application INT, @question INT, @token VARCHAR(8), @answer INT
+  AS
+  DECLARE @active INT, @count INT, @kind INT
+  --Check if it is active
+  EXEC getIsPollActive @token, @active = @active OUT
+  IF @active = 1
+      BEGIN
+        SELECT @kind = tipo FROM Poll_Questions WHERE id = @question
+        IF @kind = 1
+          BEGIN
+            SELECT @count = count(*) FROM Selections WHERE aplicacion = @application AND respuesta = @answer
+            IF @count = 0 OR @count IS NULL
+              BEGIN
+                INSERT INTO Selections VALUES (@application, @answer)
+              END
+          END
+        ELSE IF @kind = 2
+          BEGIN
+            INSERT INTO Selections VALUES (@application, @answer)
+          END
+      END
+GO
+
+CREATE PROCEDURE saveAnswer @application INT, @token VARCHAR(8), @question INT, @answer VARCHAR(255)
+  AS
+  DECLARE @active INT
+  EXEC getIsPollActive @token, @active = @active OUT
+  IF @active = 1
+      BEGIN
+        INSERT INTO Answers VALUES (@application, @question, @answer);
+      END
+GO
+
+CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(3), @id INT OUT
+  AS
+  DECLARE @active BIT
+  --Check if it is active
+  EXEC getIsPollActive @token, @active = @active OUT
+  IF @active = 1
+      BEGIN
+        --Check if it can be answered
+        EXEC canSavePoll @token, @term, @respondent, @active = @active OUT
+        IF @active = 1
+          BEGIN
+            --Insert values
+             INSERT INTO Aplicacion VALUES (@term, sysdatetime(), @respondent, @token)
+             --Confirm Insert
+            IF @@ROWCOUNT = 1
+              SET @id = scope_identity()
+          END
+      END
+  SELECT @id
+GO
+

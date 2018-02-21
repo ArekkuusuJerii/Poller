@@ -15,11 +15,13 @@ public class Poll {
     public String title;
     @SerializedName("activar")
     public boolean active;
+    @SerializedName("periodo")
+    public String term;
     @SerializedName("preguntas")
     public List<Question> questions = new ArrayList<>();
 
     public String create() {
-        String out = PollImpl.createPoll(this.title, this.active, this.token);
+        String out = PollImpl.createPoll(this.title, this.active, this.term, this.token);
         if(!out.isEmpty()) {
             this.token = out;
             questions.forEach(p -> p.create(token));

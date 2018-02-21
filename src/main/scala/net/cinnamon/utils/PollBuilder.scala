@@ -15,6 +15,11 @@ object PollBuilder {
     this
   }
 
+  def >(term: String): P = {
+    poll.term = term
+    this
+  }
+
   def ?(text: String): Q = {
     new QuestionBuilder(this, text, Kind.SINGLE)
   }

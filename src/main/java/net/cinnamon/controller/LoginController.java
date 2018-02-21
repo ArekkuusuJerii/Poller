@@ -35,6 +35,8 @@ public class LoginController implements IController {
         if (optional.isPresent()) {
             MenuController.setId(optional.get());
             StageHelper.openMenu(tf_email.getText());
+            tf_email.setText("");
+            pf_password.setText("");
             hideWindow();
         } else {
             AlertHelper.showError("Correo o Contraseña incorrecta").showAndWait();

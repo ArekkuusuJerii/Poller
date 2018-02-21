@@ -13,6 +13,7 @@ import net.cinnamon.entity.Question;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
 import net.cinnamon.helper.StyleHelper;
+import net.cinnamon.repository.PollImpl;
 import net.cinnamon.utils.LimitedTextArea;
 
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ import java.util.List;
 public class PollController implements IController {
 
     @FXML ScrollPane scroll_node;
+    @FXML Button btn_done;
     @FXML Label lb_user;
     @FXML Label lb_title;
+    @FXML Label lb_term;
     private List<PaneNode> nodes = new ArrayList<>();
     private Poll poll;
 
@@ -46,7 +49,7 @@ public class PollController implements IController {
         AlertHelper.showConfirmation("¿Desea concluir la encuesta?").ifPresent(button -> {
             if (button == ButtonType.OK) {
                 if (nodes.stream().peek(PaneNode::markDirty).allMatch(PaneNode::hasAnswer)) {
-                    nodes.forEach(n -> n.save(poll));
+                    savePollAnswer();
                     hideWindow();
                 } else {
                     AlertHelper.showAlert("Faltan preguntas por responder").showAndWait();
@@ -54,6 +57,15 @@ public class PollController implements IController {
                 }
             }
         });
+    }
+
+    private void savePollAnswer() {
+        int application = PollImpl.savePoll(poll);
+        if(application != -1) {
+            nodes.forEach(n -> n.save(poll.token, application));
+        } else {
+            AlertHelper.showError("No es posible contestar la encuesta").showAndWait();
+        }
     }
 
     @Override
@@ -65,11 +77,11 @@ public class PollController implements IController {
     public void open(String token) {
         this.poll = Poll.read(token);
         this.lb_title.setText(poll.title);
+        this.lb_term.setText(poll.term);
         VBox box = new VBox();
         poll.questions.forEach(question ->
                 box.getChildren().add(StageHelper.loadQuestion(nodes, question))
         );
-        box.getChildren().add(StageHelper.loadDone(this));
         scroll_node.setContent(box);
         Platform.runLater(() -> {
             scroll_node.setVvalue(0);
@@ -78,12 +90,9 @@ public class PollController implements IController {
 
     public interface PaneNode {
         void loadQuestion(Question question);
-
         boolean hasAnswer();
-
         void markDirty();
-
-        void save(Poll poll);
+        void save(String token, int application);
     }
 
     public static class OpenQuestion implements PaneNode {
@@ -118,8 +127,8 @@ public class PollController implements IController {
         }
 
         @Override
-        public void save(Poll poll) {
-
+        public void save(String token, int application) {
+            PollImpl.saveAnswer(token, application, question, tf_answer.getText());
         }
     }
 
@@ -169,7 +178,9 @@ public class PollController implements IController {
                     label.setText(answer.text);
                 } else {
                     button.setDisable(true);
+                    button.setVisible(false);
                     label.setDisable(true);
+                    label.setVisible(false);
                 }
             }
         }
@@ -186,8 +197,8 @@ public class PollController implements IController {
         }
 
         @Override
-        public void save(Poll poll) {
-
+        public void save(String token, int application) {
+            PollImpl.saveSelection(token, application, question, (Answer) tg_answer.getSelectedToggle().getUserData());
         }
     }
 
@@ -237,7 +248,9 @@ public class PollController implements IController {
                     button.setUserData(answer);
                 } else {
                     button.setDisable(true);
+                    button.setVisible(false);
                     label.setDisable(true);
+                    label.setVisible(false);
                 }
             }
         }
@@ -254,8 +267,10 @@ public class PollController implements IController {
         }
 
         @Override
-        public void save(Poll poll) {
-
+        public void save(String token, int application) {
+            list.stream().map(Pair::getKey).filter(CheckBox::isSelected)
+                    .map(b -> (Answer) b.getUserData())
+                    .forEach(answer -> PollImpl.saveSelection(token, application, question, answer));
         }
     }
 }

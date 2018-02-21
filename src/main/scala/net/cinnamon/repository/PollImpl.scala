@@ -30,16 +30,17 @@ object PollImpl {
     out
   }
 
-  def createPoll(title: String, active: Boolean)(token: Token): Token = {
+  def createPoll(title: String, active: Boolean, term: String)(token: Token): Token = {
     var token = ""
     val owner = Int.box(MenuController.getId)
     val in = mutable.Map(
       "title" -> title,
       "owner" -> owner,
-      "active" -> active
+      "active" -> active,
+      "term" -> term
     )
     if(token != null && token.nonEmpty) in += "token" -> token
-    SequenceHelper.call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?)}",
+    SequenceHelper.call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?,?)}",
       ->[String](_, "token")(token = _)
     )
     token
@@ -49,12 +50,12 @@ object PollImpl {
     var id = -1
     val in = mutable.Map(
       "text" -> text,
-      "token" -> token,
-      "kind" -> kind.id
+      "kind" -> kind.id,
+      "token" -> token
     )
     if(id > 0) in += "id" -> id
     SequenceHelper.call(in.toMap, Map("id" -> Types.INTEGER))("{call createQuestion(?,?,?,?)}",
-      ->[Int](_, "token")(id = _)
+      ->[Int](_, "id")(id = _)
     )
     id
   }
@@ -100,15 +101,50 @@ object PollImpl {
     }
 
     var poll: Poll = null
-    SequenceHelper.call(Map("token" -> token), Map("title" -> Types.VARCHAR, "active" -> Types.BOOLEAN))("{call getPoll(?, ?, ?)}",
+    SequenceHelper.call(Map("token" -> token), Map("title" -> Types.VARCHAR, "active" -> Types.BOOLEAN, "term" -> Types.VARCHAR))("{call getPoll(?,?,?,?)}",
       map => {
         poll = new Poll
         ->[String](map, "title")(poll.title = _)
         ->[Boolean](map, "active")(poll.active = _)
+        ->[String](map, "term")(poll.term = _)
         poll.token = token
         readQuestion(poll)
       }
     )
     poll
+  }
+
+  def savePoll(poll: Poll): Int = {
+    var id = -1
+    val owner = Int.box(MenuController.getId)
+    val in = Map(
+      "respondent" -> owner,
+      "token" -> poll.token,
+      "term" -> poll.term
+    )
+    SequenceHelper.call(in, Map("id" -> Types.INTEGER))("{call savePoll(?,?,?,?)}",
+      ->[Int](_, "id")(id = _)
+    )
+    id
+  }
+
+  def saveSelection(token: Token, application: Int, question: Question, answer: Answer): Unit = {
+    val in = Map(
+      "application" -> application,
+      "token" -> token,
+      "question" -> question,
+      "answer" -> answer.id
+    )
+    SequenceHelper.call(in, Map.empty)("{call saveSelection(?,?,?,?)}", _ => Unit)
+  }
+
+  def saveAnswer(token: Token, application: Int, question: Question, answer: String): Unit = {
+    val in = Map(
+      "application" -> application,
+      "token" -> token,
+      "question" -> question,
+      "answer" -> answer
+    )
+    SequenceHelper.call(in, Map.empty)("{call saveAnswer(?,?,?,?)}", _ => Unit)
   }
 }
