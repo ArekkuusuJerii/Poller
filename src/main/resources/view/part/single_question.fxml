@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #353535;" stylesheets="@../../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.PollController$SingleQuestion">
-    <Label fx:id="lb_question" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="150.0" prefWidth="570.0" style="-fx-background-color: #161616;" styleClass="centerTextArea" wrapText="true">
+    <Label fx:id="lb_question" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="150.0" prefWidth="570.0" style="-fx-background-color: #161616; -fx-border-color: white;" styleClass="centerTextArea" wrapText="true">
         <cursor>
           <Cursor fx:constant="DEFAULT" />
         </cursor>
