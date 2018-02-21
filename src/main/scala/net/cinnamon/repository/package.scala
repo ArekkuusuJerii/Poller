@@ -31,7 +31,7 @@ package repository {
 
   object RegisterImpl {
     def register(firstName: String, secondName: String, email: String, password: String): Boolean = {
-      var out = false
+      var success = false
       val in = Map(
         "firstName" -> firstName,
         "secondName" -> secondName,
@@ -39,17 +39,17 @@ package repository {
         "password" -> password
       )
       call(in, Map("success" -> Types.BOOLEAN))("{call register(?,?,?,?,?)}",
-        ->[Boolean](_, "success")(out = _)
+        ->[Boolean](_, "success")(success = _)
       )
-      out
+      success
     }
 
     def canCreateAccount(email: String): Boolean = {
-      var out = false
+      var confirm = false
       call(Map("email" -> email), Map("confirm" -> Types.BOOLEAN))("{call canCreateAccount(?,?)}",
-        ->[Boolean](_, "confirm")(out = _)
+        ->[Boolean](_, "confirm")(confirm = _)
       )
-      out
+      confirm
     }
   }
 
