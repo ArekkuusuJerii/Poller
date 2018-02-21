@@ -152,22 +152,6 @@ package helper {
       }
       null
     }
-
-    def loadDone(pollController: PollController): Parent = {
-      StageLoader.getURL(getClass, "view/part/done.fxml") match {
-        case Some(layout) =>
-          try {
-            val loader = new FXMLLoader(layout)
-            loader.setController(pollController)
-            return loader.load()
-          } catch {
-            case e: IOException =>
-              e.printStackTrace()
-          }
-        case None =>
-      }
-      null
-    }
   }
 
   object StageLoader {
