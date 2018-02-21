@@ -15,11 +15,11 @@ object StatisticImpl {
       "question" -> question.id
     )
     call(in, Map.empty)("{call getSelectionStatistics(?,?)}",
-      _ => {
+      map => {
         var answer: String = ""
         var amount: Int = 0
-        ->[String](_, "answer")(answer = _)
-        ->[Int](_, "amount")(amount = _)
+        ->[String](map, "answer")(answer = _)
+        ->[Int](map, "amount")(amount = _)
         buf +=((answer, amount))
       }
     )
@@ -32,7 +32,7 @@ object StatisticImpl {
       "token" -> token,
       "question" -> question.id
     )
-    call(in, Map.empty)("{call getInputStatistics(?,?)}", ->[String](_, "answer")(_ => buf += _))
+    call(in, Map.empty)("{call getInputStatistics(?,?)}", ->[String](_, "answer")(answer => buf += answer))
     buf
   }
 }
