@@ -288,7 +288,7 @@ CREATE PROCEDURE getAnswer @question INT
   SELECT id, respuesta FROM Question_Answer WHERE pregunta = @question
 GO
 
-CREATE VIEW Survey AS SELECT periodo, fecha, encuesta_fk AS token, respondiente_fk AS respondiente FROM Aplicacion
+CREATE VIEW Survey AS SELECT id_pk AS id, periodo, fecha, encuesta_fk AS token, respondiente_fk AS respondiente FROM Aplicacion
 GO
 
 CREATE PROCEDURE getCanAnswerPoll @respondent INT, @token VARCHAR(8), @confirmation BIT OUT
@@ -373,7 +373,7 @@ CREATE PROCEDURE savePoll @respondent INT, @token VARCHAR(8), @term VARCHAR(7), 
         IF @active = 1
           BEGIN
             --Insert values
-             INSERT INTO Survey VALUES (@term, sysdatetime(), @token, @respondent)
+             INSERT INTO Survey(periodo, fecha, token, respondiente) VALUES (@term, sysdatetime(), @token, @respondent)
              --Confirm Insert
             IF @@ROWCOUNT = 1
               SET @id = scope_identity()

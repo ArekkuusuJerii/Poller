@@ -8,11 +8,12 @@ import net.cinnamon.repository.helper.->
 import scala.collection.mutable.ArrayBuffer
 
 object StatisticImpl {
-  def getSelectionStatistics(token: Token, question: Question): ArrayBuffer[(String, Int)] = {
+  def getSelectionStatistics(term: String, token: Token, question: Question): ArrayBuffer[(String, Int)] = {
     val buf: ArrayBuffer[(String, Int)] = ArrayBuffer()
     val in = Map(
       "token" -> token,
-      "question" -> question.id
+      "question" -> question.id,
+      "term" -> term
     )
     call(in, Map.empty)("{call getSelectionStatistics(?,?)}",
       map => {
