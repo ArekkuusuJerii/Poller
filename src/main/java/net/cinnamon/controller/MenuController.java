@@ -34,7 +34,7 @@ public class MenuController implements IController {
                 if(PollImpl.getCanAnswerPoll(tf_token.getText())) {
                     StageHelper.openPoll(tf_token.getText());
                     hideWindow();
-                } else AlertHelper.showError("No puedes contestar esta encuesta").showAndWait();
+                } else AlertHelper.showError("Ya no puedes contestar esta encuesta").showAndWait();
             } else AlertHelper.showError("Esta encuesta no se encuentra activa").showAndWait();
         } else AlertHelper.showError("Este token no es válido").showAndWait();
     }
