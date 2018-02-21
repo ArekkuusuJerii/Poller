@@ -113,10 +113,9 @@ object PollImpl {
       )
     }
 
-    var poll: Poll = null
+    val poll: Poll = new Poll
     call(Map("token" -> token), Map("title" -> Types.VARCHAR, "active" -> Types.BOOLEAN, "term" -> Types.VARCHAR))("{call getPoll(?,?,?,?)}",
       map => {
-        poll = new Poll
         ->[String](map, "title")(poll.title = _)
         ->[Boolean](map, "active")(poll.active = _)
         ->[String](map, "term")(poll.term = _)
