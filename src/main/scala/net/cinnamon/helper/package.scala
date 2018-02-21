@@ -13,9 +13,11 @@ package helper {
   import javafx.stage.{Modality, Window}
 
   import net.cinnamon.controller.PollController.PaneNode
+  import net.cinnamon.controller.StatisticController.Statistic
   import net.cinnamon.controller._
   import net.cinnamon.entity.Question
   import net.cinnamon.entity.Question.Kind
+  import net.cinnamon.repository.PollImpl.Token
 
   object AlertHelper {
     def showError(text: String): Alert = {
@@ -95,7 +97,7 @@ package helper {
       stage.show()
     }
 
-    def openPoll(token: String): Unit = {
+    def openPoll(token: Token): Unit = {
       val stage = StageLoader.load(classOf[PollController], "view/poll.fxml")(p => p.open(token))
       stage.setTitle("Encuesta")
       stage.centerOnScreen()
@@ -120,7 +122,7 @@ package helper {
       stage.show()
     }
 
-    def openToken(window: Window, token: String): Unit = {
+    def openToken(window: Window, token: Token): Unit = {
       val stage = StageLoader.load(classOf[TokenController],"view/token.fxml")(t => t setToken token )
       stage.initModality(Modality.WINDOW_MODAL)
       stage.initOwner(window)
@@ -143,6 +145,28 @@ package helper {
             val controller = loader.getController[PaneNode]
             controller.loadQuestion(question)
             list.add(controller)
+            return parent
+          } catch {
+            case e: IOException =>
+              e.printStackTrace()
+          }
+        case None =>
+      }
+      null
+    }
+
+    def loadStatistic(token: Token, question: Question): Parent = {
+      val view = question.kind match {
+        case Kind.OPEN => "view/part/statistic_list.fxml"
+        case _ => "view/part/statistic_chart.fxml"
+      }
+      StageLoader.getURL(getClass, view) match {
+        case Some(layout) =>
+          try {
+            val loader = new FXMLLoader(layout)
+            val parent: Parent = loader.load()
+            val controller = loader.getController[Statistic]
+            controller.load(token, question)
             return parent
           } catch {
             case e: IOException =>
