@@ -57,7 +57,7 @@
                   <Insets left="5.0" right="5.0" />
                </padding>
             </Label>
-            <Label fx:id="lb_term" alignment="CENTER" contentDisplay="CENTER" layoutX="328.0" layoutY="25.0" prefHeight="22.0" prefWidth="84.0" style="-fx-background-color: black;" text="FEB-MAR" wrapText="true">
+            <Label fx:id="lb_term" alignment="CENTER" contentDisplay="CENTER" layoutX="328.0" layoutY="25.0" prefHeight="22.0" prefWidth="84.0" style="-fx-background-color: black;" wrapText="true">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
