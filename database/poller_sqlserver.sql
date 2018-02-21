@@ -407,3 +407,13 @@ CREATE PROCEDURE getInputStatistics @token VARCHAR(8), @question INT, @term VARC
     INNER JOIN AnswerInput AI ON S.id = AI.aplicacion --By matching id, the Answer text
   WHERE S.token = @token AND S.periodo = @term AND AI.pregunta = @question --That match a token, a term and a question
 GO
+
+CREATE PROCEDURE getTerms @token VARCHAR(8)
+  AS
+  SELECT periodo AS term FROM Survey S WHERE token = @token GROUP BY periodo
+GO
+
+CREATE PROCEDURE getPollInfo @token VARCHAR(8)
+  AS
+  SELECT cast(titulo AS NVARCHAR) AS title, periodo AS term, activa AS active FROM Poll WHERE token = @token
+GO

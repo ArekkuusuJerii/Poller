@@ -44,7 +44,7 @@ object PollImpl {
   }
 
   def createPoll(title: String, active: Boolean, term: String)(token: Token): Token = {
-    var token = ""
+    var out = ""
     val owner = Int.box(MenuController.getId)
     val in = mutable.Map(
       "title" -> title,
@@ -54,9 +54,9 @@ object PollImpl {
     )
     if(token != null && token.nonEmpty) in += "token" -> token
     call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?,?)}",
-      ->[String](_, "token")(token = _)
+      ->[String](_, "token")(out = _)
     )
-    token
+    out
   }
 
   def createQuestion(text: String, kind: Kind, token: Token)(id: Int): Int = {

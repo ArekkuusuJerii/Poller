@@ -10,6 +10,7 @@ import javafx.stage.Stage
 
 package helper {
 
+  import javafx.scene.control.TextInputDialog
   import javafx.stage.{Modality, Window}
 
   import net.cinnamon.controller.PollController.PaneNode
@@ -43,10 +44,19 @@ package helper {
       StyleHelper.apply(alert.getDialogPane, "css/modern_dark.css")
       alert.showAndWait()
     }
+
+    def showTextInput(text: String, input: String): Optional[String] = {
+      val dialog: TextInputDialog = new TextInputDialog(text)
+      StyleHelper.apply(dialog.getDialogPane, "css/modern_dark.css")
+      dialog.setHeaderText(text)
+      dialog.setContentText(input)
+      dialog.showAndWait()
+    }
   }
 
   object StyleHelper {
     type Style = String
+    val TextFont: Style = "-fx-font"
     val TextColor: Style = "-fx-text-fill"
     val BorderColor: Style = "-fx-border-color"
 
@@ -155,7 +165,7 @@ package helper {
       null
     }
 
-    def loadStatistic(token: Token, question: Question): Parent = {
+    def loadStatistic(token: Token, term: String, question: Question): Parent = {
       val view = question.kind match {
         case Kind.OPEN => "view/part/statistic_list.fxml"
         case _ => "view/part/statistic_chart.fxml"
@@ -166,7 +176,7 @@ package helper {
             val loader = new FXMLLoader(layout)
             val parent: Parent = loader.load()
             val controller = loader.getController[Statistic]
-            controller.load(token, question)
+            controller.load(token, term, question)
             return parent
           } catch {
             case e: IOException =>

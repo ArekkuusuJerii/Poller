@@ -37,4 +37,26 @@ object StatisticImpl {
     call(in, Map.empty)("{call getInputStatistics(?,?,?)}", ->[String](_, "answer")(answer => buf.add(answer)))
     buf
   }
+
+  def getTerms(token: Token): java.util.List[String] = {
+    val buf = new util.ArrayList[String]()
+    call(Map("token" -> token), Map.empty)("{call getTerms(?)}", ->[String](_, "term")(term => buf.add(term)))
+    buf
+  }
+
+  def getPollInfo(token: Token): (String, String, java.lang.Boolean) = {
+    var tuple: (String, String, java.lang.Boolean) = ("", "", false)
+    call(Map("token" -> token), Map.empty)("{call getPollInfo(?)}",
+      map => {
+        var title = ""
+        var term = ""
+        var active = false
+        ->[String](map, "title")(title = _)
+        ->[String](map, "term") (term = _)
+        ->[java.lang.Boolean](map, "active") (active = _)
+        tuple = (title, term, active)
+      }
+    )
+    tuple
+  }
 }
