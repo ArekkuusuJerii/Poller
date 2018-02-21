@@ -75,11 +75,14 @@ public class StatisticController implements IController {
                     tf_title.setDisable(false);
                     //Get Tuple data
                     Tuple3<String, String, Boolean> tuple = StatisticImpl.getPollInfo(tf_token.getText());
-                    poll = new Poll();
+                    Poll poll = new Poll();
                     poll.title = tuple._1();
                     poll.term = tuple._2();
                     poll.active = tuple._3();
                     poll.token = tf_token.getText();
+                    tf_title.setText(poll.title);
+                    cb_active.setSelected(poll.active);
+                    this.poll = poll; //Keep here!
                 } else {
                     AlertHelper.showError("Esta encuesta no te pertenece").showAndWait();
                     clear();
