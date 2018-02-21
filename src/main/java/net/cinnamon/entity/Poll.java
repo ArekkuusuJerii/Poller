@@ -29,6 +29,10 @@ public class Poll {
         return token;
     }
 
+    public void overwrite() {
+        PollImpl.createPoll(this.title, this.active, this.term, this.token);
+    }
+
     public static Poll read(String token) {
         return PollImpl.readPoll(token);
     }

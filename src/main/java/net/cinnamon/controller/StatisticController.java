@@ -3,6 +3,7 @@ package net.cinnamon.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import net.cinnamon.entity.Poll;
 import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.repository.PollImpl;
 
@@ -25,7 +26,7 @@ public class StatisticController implements IController {
         } else AlertHelper.showError("Este token no es válido").showAndWait();
     }
 
-    private void open(net.cinnamon.entity.Poll poll) {
+    private void open(Poll poll) {
 
     }
 
