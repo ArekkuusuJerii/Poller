@@ -49,7 +49,6 @@ package helper {
       val dialog: TextInputDialog = new TextInputDialog(text)
       StyleHelper.apply(dialog.getDialogPane, "css/modern_dark.css")
       dialog.setHeaderText(text)
-      dialog.setContentText(input)
       dialog.showAndWait()
     }
   }
