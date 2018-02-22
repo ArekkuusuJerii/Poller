@@ -20,7 +20,7 @@ object PollBuilder {
     this
   }
 
-  def ?(text: String): Q = {
+  def ?-(text: String): Q = {
     new QuestionBuilder(this, text, Kind.SINGLE)
   }
 
@@ -28,7 +28,7 @@ object PollBuilder {
     new QuestionBuilder(this, text, Kind.MULTIPLE)
   }
 
-  def ?-(text: String): P = {
+  def ?(text: String): P = {
     new QuestionBuilder(this, text, Kind.OPEN)!
   }
 

@@ -34,7 +34,7 @@ object Test extends App {
 
   def deserialize(): Unit = {
     val encuesta = PollBuilder + "Encuesta de Literatura" == "FEB-MAR - 2018"
-    val pregunta1 = encuesta ? "Que tan frecuentemente lee libros?"
+    val pregunta1 = encuesta ?- "Que tan frecuentemente lee libros?"
     pregunta1 - "Diariamente"
     pregunta1 - "Cada semana"
     pregunta1 - "Cada mes"
@@ -46,7 +46,7 @@ object Test extends App {
     pregunta2 - "Libros de poesia"
     pregunta2 - "Antologias"
     pregunta2 - "Otros"
-    val pregunta3 = encuesta ?- "Puede mencionar al menos un (1) libro de cada categoria?"
+    val pregunta3 = encuesta ? "Puede mencionar al menos un (1) libro de cada categoria?"
 
     //JSON
     val parser = new GsonBuilder().setPrettyPrinting().create
