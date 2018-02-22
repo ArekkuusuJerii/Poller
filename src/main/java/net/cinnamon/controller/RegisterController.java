@@ -53,7 +53,7 @@ public class RegisterController implements IController {
 
     @FXML
     public void handleAcceptEvent(MouseEvent event) {
-        if(StringHelper.checkEmail(tf_email.getText())) {
+        if (StringHelper.checkEmail(tf_email.getText())) {
             if (RegisterImpl.canCreateAccount(tf_email.getText())) {
                 boolean nonEmpty = nonEmptyFields();
                 boolean matchingPasswords = passWordsMatch();
@@ -78,8 +78,7 @@ public class RegisterController implements IController {
                     if (!nonEmpty) {
                         AlertHelper.showError("No pueden haber campos vacios")
                                 .showAndWait();
-                    }
-                    if (!matchingPasswords) {
+                    } else {
                         AlertHelper.showError("Las contraseñas no coinciden")
                                 .showAndWait()
                                 .ifPresent(button -> {
