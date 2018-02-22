@@ -17,6 +17,17 @@ public class LoginController implements IController {
     @FXML TextField tf_email;
     @FXML PasswordField pf_password;
 
+    public static void login(String email, String password, Runnable success) {
+        Optional<Integer> optional = LoginImpl.login(email, password);
+        if (optional.isPresent()) {
+            MenuController.setId(optional.get());
+            StageHelper.openMenu(email);
+            success.run();
+        } else {
+            AlertHelper.showError("Correo o Contraseña incorrecta").showAndWait();
+        }
+    }
+
     @Override
     public void initialize() {
         tf_email.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -31,16 +42,11 @@ public class LoginController implements IController {
 
     @FXML
     public void handleLoginEvent(MouseEvent event) {
-        Optional<Integer> optional = LoginImpl.login(tf_email.getText(), pf_password.getText());
-        if (optional.isPresent()) {
-            MenuController.setId(optional.get());
-            StageHelper.openMenu(tf_email.getText());
+        LoginController.login(tf_email.getText(), pf_password.getText(), () -> {
             tf_email.setText("");
             pf_password.setText("");
             hideWindow();
-        } else {
-            AlertHelper.showError("Correo o Contraseña incorrecta").showAndWait();
-        }
+        });
     }
 
     @FXML

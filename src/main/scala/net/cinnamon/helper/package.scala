@@ -107,9 +107,19 @@ package helper {
       stage.show()
     }
 
-    def openPoll(token: Token): Unit = {
+    def openPoll(window: Window, token: Token): Unit = {
       val stage = StageLoader.load(classOf[PollController], "view/poll.fxml")(p => p.open(token))
+      stage.initOwner(window)
       stage.setTitle("Encuesta")
+      stage.centerOnScreen()
+      stage.show()
+    }
+
+    def openUseToken(window: Window): Unit = {
+      val stage = StageLoader.load(classOf[UseToken],"view/use_token.fxml")(u => u.setParent(window))
+      stage.initModality(Modality.WINDOW_MODAL)
+      stage.initOwner(window)
+      stage.setTitle("Token")
       stage.centerOnScreen()
       stage.show()
     }

@@ -75,7 +75,7 @@
             <ScrollPane fx:id="scroll_node" hbarPolicy="NEVER" prefHeight="397.0" prefWidth="615.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS" />
          </children></Pane>
     </GridPane>
-   <Button fx:id="btn_done" layoutX="25.0" layoutY="512.0" mnemonicParsing="false" onMouseReleased="#handleDoneEvent" prefHeight="27.0" prefWidth="439.0" style="-fx-text-fill: red;" text="Finalizar" textFill="RED">
+   <Button fx:id="btn_done" layoutX="380.0" layoutY="512.0" mnemonicParsing="false" onMouseReleased="#handleDoneEvent" prefHeight="27.0" prefWidth="84.0" style="-fx-text-fill: red;" text="Finalizar" textFill="RED">
       <font>
          <Font name="Consolas Bold" size="13.0" />
       </font>
@@ -86,4 +86,9 @@
       </font>
    </Button>
    <Separator layoutX="482.0" layoutY="510.0" orientation="VERTICAL" prefHeight="30.0" />
+   <Button fx:id="btn_done1" layoutX="28.0" layoutY="512.0" mnemonicParsing="false" onMouseReleased="#handleDoneEvent" prefHeight="27.0" prefWidth="84.0" style="-fx-text-fill: red;" text="Finalizar" textFill="RED">
+      <font>
+         <Font name="Consolas Bold" size="13.0" />
+      </font>
+   </Button>
 </AnchorPane>

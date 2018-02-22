@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
@@ -11,80 +11,104 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
-<?import net.cinnamon.utils.LimitedTextField?>
 
-<AnchorPane prefHeight="400.0" prefWidth="350.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.MenuController">
-    <GridPane prefHeight="400.0" prefWidth="350.0">
+<AnchorPane prefHeight="450.0" prefWidth="350.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.MenuController">
+    <GridPane prefHeight="450.0" prefWidth="350.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="175.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="175.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;">
-            <ImageView fitHeight="106.0" fitWidth="134.0" layoutX="35.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../img/poller.png" />
+            <ImageView fitHeight="106.0" fitWidth="134.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#logout" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
             <effect>
                <InnerShadow />
             </effect>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <image>
+               <Image url="@../img/logout.png" />
+            </image>
             </ImageView>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <ImageView fitHeight="115.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../img/answer.png" />
-            <effect>
-               <InnerShadow />
-            </effect>
-            </ImageView>
+         <Label layoutX="47.0" layoutY="126.0" text="Cerrar Sesión">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Label>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.rowIndex="2">
-            <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#handleVisualizeEvent" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
                 <Image url="@../img/statistic.png" />
             <effect>
                <InnerShadow />
             </effect>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
             </ImageView>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="205.0" style="-fx-border-color: white;" GridPane.columnIndex="1">
-            <Label layoutX="64.0" layoutY="14.0" text="CUENTA">
-                <font>
-                    <Font name="Consolas" size="14.0" />
-                </font>
-            </Label>
-            <Label fx:id="lb_user" alignment="CENTER" layoutX="9.0" layoutY="42.0" prefHeight="25.0" prefWidth="158.0" style="-fx-background-color: black;" textAlignment="CENTER" />
-            <Button layoutX="33.0" layoutY="85.0" mnemonicParsing="false" onMouseReleased="#logout" style="-fx-text-fill: red;" text="Cerrar Sesión">
-                <font>
-                    <Font name="Consolas Bold" size="13.0" />
-                </font>
-            </Button>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="1">
-            <Button contentDisplay="CENTER" layoutX="61.0" layoutY="85.0" mnemonicParsing="false" onMouseReleased="#handleOpenEvent" text="Abrir" textOverrun="CLIP">
-                <font>
-                    <Font name="Consolas" size="13.0" />
-                </font>
-            </Button>
-         <Label layoutX="18.0" layoutY="14.0" text="Responder encuesta">
+         <Label layoutX="53.0" layoutY="126.0" text="Estadísticas">
             <font>
-               <Font name="Consolas" size="14.0" />
+               <Font size="14.0" />
             </font>
          </Label>
-         <LimitedTextField fx:id="tf_token" alignment="CENTER" layoutX="13.0" layoutY="42.0" maxLength="8" promptText="Ingresar token" style="-fx-background-color: black;" />
+        </Pane>
+        <Pane prefHeight="200.0" prefWidth="205.0" style="-fx-border-color: white;" GridPane.columnIndex="1">
+            <Label layoutX="14.0" layoutY="114.0" text="CUENTA">
+                <font>
+                    <Font name="Consolas" size="18.0" />
+                </font>
+            </Label>
+            <Label fx:id="lb_user" alignment="CENTER" focusTraversable="false" layoutX="14.0" layoutY="75.0" prefHeight="27.0" prefWidth="142.0" style="-fx-background-color: black;" textAlignment="CENTER" wrapText="true">
+            <font>
+               <Font name="Consolas" size="12.0" />
+            </font></Label>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <Button contentDisplay="CENTER" layoutX="27.0" layoutY="34.0" mnemonicParsing="false" onMouseReleased="#handleVisualizeEvent" prefHeight="27.0" prefWidth="122.0" text="Estadísticas" textOverrun="CLIP">
-                <font>
-                    <Font name="Consolas" size="13.0" />
-                </font>
-            </Button>
-         <Button contentDisplay="CENTER" layoutX="27.0" layoutY="72.0" mnemonicParsing="false" onMouseReleased="#handleCreateEvent" prefHeight="27.0" prefWidth="122.0" text="Nueva encuesta" textOverrun="CLIP">
+         <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#handleCreateEvent" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
+            <effect>
+               <InnerShadow />
+            </effect>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <image>
+               <Image url="@../img/create.png" />
+            </image>
+         </ImageView>
+         <Label layoutX="39.0" layoutY="126.0" text="Nueva Encuesta">
             <font>
-               <Font name="Consolas" size="13.0" />
+               <Font size="14.0" />
             </font>
-         </Button>
+         </Label>
         </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="1">
+         <children>
+            <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/poller.png" />
+               </image>
+            </ImageView>
+         </children></Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <ImageView fitHeight="123.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#handleOpenEvent" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
+               <image>
+                  <Image url="@../img/answer.png" />
+               </image>
+               <effect>
+                  <InnerShadow />
+               </effect>
+            </ImageView>
+            <Label layoutX="55.0" layoutY="126.0" text="Responder">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children></Pane>
     </GridPane>
 </AnchorPane>

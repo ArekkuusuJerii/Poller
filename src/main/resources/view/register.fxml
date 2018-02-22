@@ -13,6 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import net.cinnamon.utils.LimitedTextField?>
 
+<?import net.cinnamon.utils.LimitedPasswordArea?>
 <AnchorPane prefHeight="609.0" prefWidth="400.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.RegisterController">
     <GridPane prefHeight="609.0" prefWidth="400.0">
         <columnConstraints>
@@ -81,7 +82,7 @@
                     <Font name="Consolas" size="18.0" />
                 </font>
             </Label>
-            <LimitedTextField fx:id="pf_password_0" layoutX="14.0" layoutY="147.0" maxLength="45" prefHeight="25.0" prefWidth="222.0" promptText="****" style="-fx-background-color: black;" />
+            <LimitedPasswordArea fx:id="pf_password_0" layoutX="14.0" layoutY="147.0" maxLength="45" prefHeight="25.0" prefWidth="222.0" promptText="****" style="-fx-background-color: black;" />
             <Label layoutX="14.0" layoutY="14.0" text="Información de la Cuenta">
                 <font>
                     <Font name="Consolas" size="18.0" />
@@ -92,7 +93,7 @@
                     <Font name="Consolas" size="18.0" />
                 </font>
             </Label>
-            <LimitedTextField fx:id="pf_password_1" layoutX="14.0" layoutY="217.0" maxLength="45" prefHeight="25.0" prefWidth="222.0" promptText="****" style="-fx-background-color: black;" />
+            <LimitedPasswordArea fx:id="pf_password_1" layoutX="14.0" layoutY="217.0" maxLength="45" prefHeight="25.0" prefWidth="222.0" promptText="****" style="-fx-background-color: black;" />
             <Button layoutX="14.0" layoutY="265.0" mnemonicParsing="false" onMouseReleased="#handleAcceptEvent" text="Aceptar">
                 <font>
                     <Font name="Consolas" size="14.0" />

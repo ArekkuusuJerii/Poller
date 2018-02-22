@@ -62,15 +62,15 @@ public class RegisterController implements IController {
                             .ifPresent(button -> {
                                 if (button == ButtonType.OK) {
                                     //Send to DB
-                                    boolean registrado = RegisterImpl.register(
+                                    boolean registered = RegisterImpl.register(
                                             tf_first_name.getText(),
                                             tf_second_name.getText(),
                                             tf_email.getText(),
                                             pf_password_0.getText()
                                     );
-                                    if (registrado) {
-                                        StageHelper.openLogin(tf_email.getText());
-                                        hideWindow();
+                                    if (registered) {
+                                        //Auto Login
+                                        LoginController.login(tf_email.getText(), pf_password_0.getText(), this::hideWindow);
                                     }
                                 }
                             });
