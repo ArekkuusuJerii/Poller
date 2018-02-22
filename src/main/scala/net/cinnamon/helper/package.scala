@@ -124,6 +124,15 @@ package helper {
       stage.show()
     }
 
+    def openViewToken(window: Window): Unit = {
+      val stage = StageLoader.load(classOf[ViewToken],"view/view_token.fxml")(u => u.setParent(window))
+      stage.initModality(Modality.WINDOW_MODAL)
+      stage.initOwner(window)
+      stage.setTitle("Token")
+      stage.centerOnScreen()
+      stage.show()
+    }
+
     def openUpload(window: Window): Unit = {
       val stage = StageLoader.load(classOf[UploadController], "view/upload.fxml")(u => u.setParent(window))
       stage.initModality(Modality.WINDOW_MODAL)
@@ -133,11 +142,11 @@ package helper {
       stage.show()
     }
 
-    def openStatistic(window: Window): Unit = {
-      val stage = StageLoader.load(classOf[StatisticController], "view/statistic.fxml")
+    def openStatistic(window: Window, token: Token): Unit = {
+      val stage = StageLoader.load(classOf[StatisticController], "view/statistic.fxml")(s => s.setToken(token))
       stage.initModality(Modality.WINDOW_MODAL)
-      stage.initOwner(window)
       stage.setTitle("Ver Encuesta")
+      stage.initOwner(window)
       stage.centerOnScreen()
       stage.show()
     }

@@ -2,6 +2,7 @@ package net.cinnamon.repository
 
 import java.util
 
+import net.cinnamon.controller.MenuController
 import net.cinnamon.entity.Question
 import net.cinnamon.helper.SequenceHelper.call
 import net.cinnamon.repository.PollImpl.Token
@@ -58,5 +59,12 @@ object StatisticImpl {
       }
     )
     tuple
+  }
+
+  def getTokens: java.util.List[String] = {
+    val buf = new util.ArrayList[String]()
+    val owner = Int.box(MenuController.getId)
+    call(Map("owner" -> owner), Map.empty)("{call getTokens(?)}", ->[String](_, "token")(token => buf.add(token)))
+    buf
   }
 }

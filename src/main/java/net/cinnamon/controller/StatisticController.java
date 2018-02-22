@@ -17,19 +17,18 @@ import scala.Tuple3;
 
 public class StatisticController implements IController {
 
-    @FXML TextField tf_token;
     @FXML ScrollPane scroll_node;
     @FXML ChoiceBox<String> choice_box;
     @FXML TextField tf_title;
     @FXML CheckBox cb_active;
     private Poll poll = null;
+    private String token;
 
     @Override
     public void initialize() {
-        tf_token.setOnAction(event -> setTerms());
         choice_box.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                open(PollImpl.readPoll(tf_token.getText()));
+                open(PollImpl.readPoll(token));
             } else clear();
         });
         tf_title.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -63,24 +62,24 @@ public class StatisticController implements IController {
         });
     }
 
-    private void setTerms() {
-        if(!tf_token.getText().isEmpty()) {
-            if (tf_token.getText().length() == 8) {
-                if (PollImpl.getIsPollOwner(tf_token.getText())) {
+    public void setToken(String token) {
+        if(!token.isEmpty()) {
+            if (token.length() == 8) {
+                if (PollImpl.getIsPollOwner(token)) {
                     //Add Terms
                     ObservableList<String> list = FXCollections.observableArrayList("");
-                    list.addAll(StatisticImpl.getTerms(tf_token.getText()));
+                    list.addAll(StatisticImpl.getTerms(token));
                     choice_box.setItems(list);
                     choice_box.setDisable(false);
                     cb_active.setDisable(false);
                     tf_title.setDisable(false);
                     //Get Tuple data
-                    Tuple3<String, String, Boolean> tuple = StatisticImpl.getPollInfo(tf_token.getText());
+                    Tuple3<String, String, Boolean> tuple = StatisticImpl.getPollInfo(token);
                     Poll poll = new Poll();
                     poll.title = tuple._1();
                     poll.term = tuple._2();
                     poll.active = tuple._3();
-                    poll.token = tf_token.getText();
+                    poll.token = token;
                     tf_title.setText(poll.title);
                     cb_active.setSelected(poll.active);
                     this.poll = poll; //Keep here!
@@ -92,6 +91,7 @@ public class StatisticController implements IController {
                 AlertHelper.showError("Este token no es válido").showAndWait();
                 clear();
             }
+            this.token = token;
         } else clear();
     }
 
@@ -107,7 +107,6 @@ public class StatisticController implements IController {
 
     private void open(Poll poll) {
         String term = choice_box.getSelectionModel().getSelectedItem();
-        this.tf_token.setText(poll.token);
         VBox box = new VBox();
         poll.questions.forEach(question -> {
             box.getChildren().add(StageHelper.loadStatistic(poll.token, term, question));
@@ -121,7 +120,7 @@ public class StatisticController implements IController {
 
     @Override
     public void hideWindow() {
-        tf_token.getScene().getWindow().hide();
+        scroll_node.getScene().getWindow().hide();
     }
 
     public interface Statistic {

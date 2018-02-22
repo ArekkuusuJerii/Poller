@@ -119,7 +119,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <Label layoutX="55.0" layoutY="126.0" text="Responder">
+            <Label layoutX="25.0" layoutY="128.0" text="Responder Encuesta">
                <font>
                   <Font size="14.0" />
                </font>

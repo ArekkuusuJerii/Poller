@@ -420,3 +420,8 @@ CREATE PROCEDURE getPollInfo @token VARCHAR(8)
   AS
   SELECT titulo AS title, periodo AS term, activa AS active FROM Poll WHERE token = @token
 GO
+
+CREATE PROCEDURE getTokens @owner INT
+  AS
+  SELECT token FROM Poll WHERE propietario = @owner
+GO

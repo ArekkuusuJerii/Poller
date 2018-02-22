@@ -30,7 +30,7 @@ public class MenuController implements IController {
 
     @FXML
     public void handleVisualizeEvent(MouseEvent event) {
-        StageHelper.openStatistic(lb_user.getScene().getWindow());
+        StageHelper.openViewToken(lb_user.getScene().getWindow());
     }
 
     @FXML
