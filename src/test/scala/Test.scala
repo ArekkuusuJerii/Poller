@@ -1,6 +1,6 @@
 import java.sql.Types
 
-import com.google.gson.Gson
+import com.google.gson.{Gson, GsonBuilder}
 import net.cinnamon.connection.DataBaseConnection
 import net.cinnamon.entity.Poll
 import net.cinnamon.helper.SequenceHelper
@@ -33,12 +33,24 @@ object Test extends App {
   }
 
   def deserialize(): Unit = {
-    val poll = PollBuilder + "Encuesta de Ejemplo" > "FEB-MAR"
-    poll ? "Puedes seleccionar una respuesta?" - "Si" - "No"
-    poll ?+ "¿Estas seguro de ello?" - "Absolutamente" - "Claro que no" - "No lo sé"
-    poll ?- "¿Muy muy seguro?"
-    val json = new Gson()
-    println(json.toJson(poll!!))
+    val encuesta = PollBuilder + "Encuesta de Literatura" == "FEB-MAR - 2018"
+    val pregunta1 = encuesta ? "Que tan frecuentemente lee libros?"
+    pregunta1 - "Diariamente"
+    pregunta1 - "Cada semana"
+    pregunta1 - "Cada mes"
+    pregunta1 - "Cada siglo"
+    pregunta1 - "Nunca"
+    val pregunta2 = encuesta ?+ "Seleccione sus categorias preferidas"
+    pregunta2 - "Libros de texto"
+    pregunta2 - "Libros ficticios"
+    pregunta2 - "Libros de poesia"
+    pregunta2 - "Antologias"
+    pregunta2 - "Otros"
+    val pregunta3 = encuesta ?- "Puede mencionar al menos un (1) libro de cada categoria?"
+
+    //JSON
+    val parser = new GsonBuilder().setPrettyPrinting().create
+    println(parser.toJson(encuesta!!))
   }
 
   def deserialize(token: Token): Unit = {

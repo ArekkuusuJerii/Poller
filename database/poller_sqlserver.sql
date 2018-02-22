@@ -7,7 +7,7 @@ CREATE TABLE Respondiente (
   id_pk INT NOT NULL IDENTITY ,
   firstName NVARCHAR(45) NOT NULL ,
   secondName NVARCHAR(255) NOT NULL ,
-  email VARCHAR(45) NOT NULL UNIQUE ,
+  email NVARCHAR(255) NOT NULL UNIQUE ,
   password NVARCHAR(45) NOT NULL ,
   PRIMARY KEY (id_pk)
 );
@@ -15,7 +15,7 @@ GO
 
 CREATE TABLE Encuesta (
   id_pk VARCHAR(8) NOT NULL UNIQUE ,
-  titulo NVARCHAR(45) NOT NULL ,
+  titulo VARCHAR(255) NOT NULL ,
   activa BIT NOT NULL ,
   propietario_fk INT NOT NULL ,
   periodo NVARCHAR(45) NOT NULL ,
@@ -107,16 +107,16 @@ GO*/
 CREATE VIEW Respondent AS SELECT id_pk AS id, firstName, secondName, email, password FROM Respondiente;
 GO
 
-CREATE PROCEDURE login @email VARCHAR(45), @password NVARCHAR(45), @login INT OUT
+CREATE PROCEDURE login @email NVARCHAR(45), @password NVARCHAR(45), @login INT OUT
   AS
   --Check for match
-  SELECT @login = id_pk FROM Respondiente WHERE email = @email AND password = @password GROUP BY id_pk
+  SELECT @login = id FROM Respondent WHERE email = cast(@email AS VARCHAR) AND password = @password GROUP BY id
 GO
 
-CREATE PROCEDURE register @firstName NVARCHAR(45), @secondName NVARCHAR(45), @email VARCHAR(45), @password NVARCHAR(45), @success BIT OUT
+CREATE PROCEDURE register @firstName NVARCHAR(255), @secondName NVARCHAR(255), @email NVARCHAR(45), @password NVARCHAR(45), @success BIT OUT
   AS
   --Insert values
-  INSERT INTO Respondent(firstName, secondName, email, password) VALUES (@firstName, @secondName, @email, @password)
+  INSERT INTO Respondent(firstName, secondName, email, password) VALUES (@firstName, @secondName, CAST(@email AS VARCHAR), @password)
   --Confirm Insert
   IF @@ROWCOUNT = 1
       SET @success = 1
@@ -126,10 +126,10 @@ CREATE PROCEDURE register @firstName NVARCHAR(45), @secondName NVARCHAR(45), @em
   SELECT @success;
 GO
 
-CREATE PROCEDURE canCreateAccount @email VARCHAR(45), @confirm BIT OUT
+CREATE PROCEDURE canCreateAccount @email NVARCHAR(45), @confirm BIT OUT
   AS
   --Check for existence
-  IF NOT exists(SELECT email FROM Respondiente WHERE email = @email)
+  IF NOT exists(SELECT email FROM Respondiente WHERE email = cast(@email AS VARCHAR))
       BEGIN
         SET @confirm = 1
       END
@@ -341,8 +341,7 @@ CREATE PROCEDURE saveAnswerSelection @application INT, @question INT, @token VAR
         SELECT @kind = tipo FROM Poll_Questions WHERE id = @question
         IF @kind = 1
           BEGIN
-            SELECT @count = count(*) FROM AnswerSelection WHERE aplicacion = @application AND respuesta = @answer
-            IF @count = 0 OR @count IS NULL
+            IF NOT exists(SELECT * FROM AnswerSelection WHERE aplicacion = @application AND respuesta = @answer)
               BEGIN
                 INSERT INTO AnswerSelection VALUES (@application, @answer)
               END
@@ -424,4 +423,15 @@ GO
 CREATE PROCEDURE getTokens @owner INT
   AS
   SELECT token FROM Poll WHERE propietario = @owner
+GO
+
+CREATE TRIGGER limitAnswerNumber
+  ON Answer INSTEAD OF INSERT
+  AS
+  DECLARE @count INT, @pregunta INT, @tipo INT
+  SELECT @pregunta = pregunta FROM inserted
+  SELECT @count = count(*) FROM Answer WHERE pregunta = @pregunta
+  SELECT @tipo = tipo FROM Question WHERE id = @pregunta
+  IF @count < 5 AND @tipo != 3
+      INSERT INTO Answer(respuesta, pregunta) SELECT respuesta, pregunta FROM inserted
 GO

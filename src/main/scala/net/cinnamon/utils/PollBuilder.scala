@@ -15,7 +15,7 @@ object PollBuilder {
     this
   }
 
-  def >(term: String): P = {
+  def ==(term: String): P = {
     poll.term = term
     this
   }

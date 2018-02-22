@@ -49,12 +49,10 @@ public class StatisticController implements IController {
                     poll.active = newValue;
                     poll.overwrite();
                 } else {
-                    AlertHelper.showTextInput("Introduce nuevo periodo", "Periodo").ifPresent(newTerm -> {
-                        if (!poll.term.equalsIgnoreCase(newTerm)) {
-                            poll.term = newTerm;
-                            poll.active = true;
-                            poll.overwrite();
-                        }
+                    AlertHelper.showTextInput("Introduce periodo", "Periodo").ifPresent(newTerm -> {
+                        poll.term = newTerm;
+                        poll.active = true;
+                        poll.overwrite();
                     });
                     cb_active.setSelected(poll.active);
                 }
@@ -96,13 +94,7 @@ public class StatisticController implements IController {
     }
 
     private void clear() {
-        choice_box.setItems(FXCollections.emptyObservableList());
-        choice_box.setDisable(true);
-        cb_active.setDisable(true);
         scroll_node.setContent(new VBox());
-        tf_title.setText("");
-        tf_title.setDisable(true);
-        poll = null;
     }
 
     private void open(Poll poll) {

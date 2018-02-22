@@ -53,7 +53,7 @@ object PollImpl {
       "term" -> term
     )
     if(token != null && token.nonEmpty) in += "token" -> token
-    call(in.toMap, Map("token" -> Types.VARCHAR))("{call createPoll(?,?,?,?,?)}",
+    call(in.toMap, Map("token" -> Types.NVARCHAR))("{call createPoll(?,?,?,?,?)}",
       ->[String](_, "token")(out = _)
     )
     out
@@ -114,7 +114,7 @@ object PollImpl {
     }
 
     val poll: Poll = new Poll
-    call(Map("token" -> token), Map("title" -> Types.VARCHAR, "active" -> Types.BOOLEAN, "term" -> Types.VARCHAR))("{call getPoll(?,?,?,?)}",
+    call(Map("token" -> token), Map("title" -> Types.NVARCHAR, "active" -> Types.BOOLEAN, "term" -> Types.NVARCHAR))("{call getPoll(?,?,?,?)}",
       map => {
         ->[String](map, "title")(poll.title = _)
         ->[Boolean](map, "active")(poll.active = _)
