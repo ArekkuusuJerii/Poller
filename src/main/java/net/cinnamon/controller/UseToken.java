@@ -23,7 +23,7 @@ public class UseToken implements IController {
         if (!tf_token.getText().isEmpty() && tf_token.getText().length() == 8) {
             if(PollImpl.getIsPollActive(tf_token.getText())) {
                 if(PollImpl.getCanAnswerPoll(tf_token.getText())) {
-                    StageHelper.openPoll(parent, tf_token.getText());
+                    StageHelper.openPoll(tf_token.getText());
                     hideWindow();
                 } else AlertHelper.showError("Ya no puedes contestar esta encuesta").showAndWait();
             } else AlertHelper.showError("Esta encuesta no se encuentra activa").showAndWait();
@@ -37,5 +37,6 @@ public class UseToken implements IController {
     @Override
     public void hideWindow() {
         tf_token.getScene().getWindow().hide();
+        parent.hide();
     }
 }

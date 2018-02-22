@@ -1,10 +1,12 @@
 package net.cinnamon.controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import net.cinnamon.entity.Answer;
@@ -15,6 +17,7 @@ import net.cinnamon.helper.StageHelper;
 import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.PollImpl;
 import net.cinnamon.utils.LimitedTextArea;
+import scala.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +25,56 @@ import java.util.List;
 @SuppressWarnings("unused") //Shut up
 public class PollController implements IController {
 
-    @FXML ScrollPane scroll_node;
-    @FXML Button btn_done;
+    @FXML Pane pane_node;
+    @FXML ImageView btn_done;
+    @FXML ImageView btn_prev;
+    @FXML ImageView btn_next;
     @FXML Label lb_user;
     @FXML Label lb_title;
     @FXML Label lb_term;
-    private List<PaneNode> nodes = new ArrayList<>();
+    private List<Tuple2<PaneNode, Parent>> nodes = new ArrayList<>();
     private Poll poll;
+    private int index;
 
     @Override
     public void initialize() {
         lb_user.setText(MenuController.getEmail());
+    }
+
+    @FXML
+    public void handleNextEvent(MouseEvent event) {
+        if(index + 1 < nodes.size()) {
+            move(index + 1);
+        }
+    }
+
+    @FXML
+    public void handlePreviousEvent(MouseEvent event) {
+        if(index > 0) {
+            move(index - 1);
+        }
+    }
+
+    private void move(int position) {
+        pane_node.getChildren().setAll(nodes.get(position)._2);
+        index = position;
+        btn_next.setDisable(position + 1 >= nodes.size());
+        btn_done.setDisable(position + 1 != nodes.size());
+        btn_prev.setDisable(position - 1 < 0);
+    }
+
+    @FXML
+    public void handleDoneEvent(MouseEvent event) {
+        if (nodes.stream().map(t -> t._1).peek(PaneNode::markDirty).allMatch(PaneNode::hasAnswer)) {
+            AlertHelper.showConfirmation("¿Desea concluir la encuesta?").ifPresent(button -> {
+                if (button == ButtonType.OK) {
+                    savePollAnswer();
+                    hideWindow();
+                }
+            });
+        } else {
+            AlertHelper.showAlert("Faltan preguntas por responder").showAndWait();
+        }
     }
 
     @FXML
@@ -44,25 +86,10 @@ public class PollController implements IController {
         });
     }
 
-    @FXML
-    public void handleDoneEvent(MouseEvent event) {
-        AlertHelper.showConfirmation("¿Desea concluir la encuesta?").ifPresent(button -> {
-            if (button == ButtonType.OK) {
-                if (nodes.stream().peek(PaneNode::markDirty).allMatch(PaneNode::hasAnswer)) {
-                    savePollAnswer();
-                    hideWindow();
-                } else {
-                    AlertHelper.showAlert("Faltan preguntas por responder").showAndWait();
-                    scroll_node.setVvalue(0);
-                }
-            }
-        });
-    }
-
     private void savePollAnswer() {
         int application = PollImpl.savePoll(poll);
         if(application != -1) {
-            nodes.forEach(n -> n.save(poll.token, application));
+            nodes.stream().map(t -> t._1).forEach(n -> n.save(poll.token, application));
             AlertHelper.showInformation("Ha contestado la encuesta satisfactoriamente").showAndWait();
         } else {
             AlertHelper.showError("No es posible contestar la encuesta").showAndWait();
@@ -81,12 +108,11 @@ public class PollController implements IController {
         this.lb_term.setText(poll.term);
         VBox box = new VBox();
         poll.questions.forEach(question ->
-                box.getChildren().add(StageHelper.loadQuestion(nodes, question))
+                StageHelper.loadQuestion(nodes, question)
         );
-        scroll_node.setContent(box);
-        Platform.runLater(() -> {
-            scroll_node.setVvalue(0);
-        });
+        if(!nodes.isEmpty()) {
+            move(0);
+        }
     }
 
     public interface PaneNode {
@@ -107,6 +133,9 @@ public class PollController implements IController {
                 if (!newValue) {
                     markDirty();
                 }
+            });
+            tf_answer.textProperty().addListener((observable, oldValue, newValue) -> {
+                markDirty();
             });
         }
 

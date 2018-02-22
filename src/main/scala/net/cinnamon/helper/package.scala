@@ -46,9 +46,10 @@ package helper {
     }
 
     def showTextInput(text: String, input: String): Optional[String] = {
-      val dialog: TextInputDialog = new TextInputDialog(text)
+      val dialog: TextInputDialog = new TextInputDialog("")
       StyleHelper.apply(dialog.getDialogPane, "css/modern_dark.css")
       dialog.setHeaderText(text)
+      dialog.setContentText("Periodo")
       dialog.showAndWait()
     }
   }
@@ -107,9 +108,8 @@ package helper {
       stage.show()
     }
 
-    def openPoll(window: Window, token: Token): Unit = {
+    def openPoll(token: Token): Unit = {
       val stage = StageLoader.load(classOf[PollController], "view/poll.fxml")(p => p.open(token))
-      stage.initOwner(window)
       stage.setTitle("Encuesta")
       stage.centerOnScreen()
       stage.show()
@@ -151,7 +151,7 @@ package helper {
       stage.show()
     }
 
-    def loadQuestion(list: java.util.List[PaneNode], question: Question): Parent = {
+    def loadQuestion(list: java.util.List[(PaneNode, Parent)], question: Question): Parent = {
       val view = question.kind match {
         case Kind.SINGLE => "view/part/single_question.fxml"
         case Kind.MULTIPLE => "view/part/multiple_question.fxml"
@@ -164,7 +164,7 @@ package helper {
             val parent: Parent = loader.load()
             val controller = loader.getController[PaneNode]
             controller.loadQuestion(question)
-            list.add(controller)
+            list.add((controller, parent))
             return parent
           } catch {
             case e: IOException =>

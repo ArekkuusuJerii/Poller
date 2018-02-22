@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -86,13 +87,24 @@
             </font>
          </Label>
         </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="1">
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white; -fx-background-color: #161616;" GridPane.rowIndex="1">
          <children>
-            <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="92.0" fitWidth="98.0" layoutX="42.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/poller.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
             </ImageView>
+            <Label layoutX="48.0" layoutY="6.0" text="POLLER">
+               <effect>
+                  <Bloom />
+               </effect>
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
          </children></Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
@@ -103,6 +115,9 @@
                <effect>
                   <InnerShadow />
                </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
             <Label layoutX="55.0" layoutY="126.0" text="Responder">
                <font>

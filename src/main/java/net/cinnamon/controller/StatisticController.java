@@ -53,11 +53,11 @@ public class StatisticController implements IController {
                     AlertHelper.showTextInput("Introduce nuevo periodo", "Periodo").ifPresent(newTerm -> {
                         if (!poll.term.equalsIgnoreCase(newTerm)) {
                             poll.term = newTerm;
+                            poll.active = true;
                             poll.overwrite();
                         }
                     });
                     cb_active.setSelected(poll.active);
-                    setTerms();
                 }
             }
         });
