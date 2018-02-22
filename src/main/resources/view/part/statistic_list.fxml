@@ -11,6 +11,6 @@
          <font>
             <Font size="18.0" />
          </font></Label>
-      <ScrollPane fx:id="scroll_node" layoutX="14.0" layoutY="98.0" prefHeight="390.0" prefWidth="470.0" />
+      <ScrollPane fx:id="scroll_node" hbarPolicy="NEVER" layoutY="96.0" prefHeight="405.0" prefWidth="500.0" vbarPolicy="ALWAYS" />
    </children>
 </AnchorPane>
