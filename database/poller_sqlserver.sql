@@ -1,24 +1,24 @@
-CREATE DATABASE poller;
+CREATE DATABASE poller COLLATE Latin1_General_CI_AS
 GO
-USE poller;
+USE poller
 GO
 
 CREATE TABLE Respondiente (
   id_pk INT NOT NULL IDENTITY ,
-  firstName NVARCHAR(45) NOT NULL ,
-  secondName NVARCHAR(255) NOT NULL ,
-  email NVARCHAR(255) NOT NULL UNIQUE ,
-  password NVARCHAR(45) NOT NULL ,
+  firstName NVARCHAR(45)) COLLATE Latin1_General_CI_AS NOT NULL ,
+  secondName NVARCHAR(255)) COLLATE Latin1_General_CI_AS NOT NULL ,
+  email NVARCHAR(255)) COLLATE Latin1_General_CI_AS NOT NULL UNIQUE ,
+  password NVARCHAR(45)) COLLATE Latin1_General_CI_AS NOT NULL ,
   PRIMARY KEY (id_pk)
 );
 GO
 
 CREATE TABLE Encuesta (
   id_pk VARCHAR(8) NOT NULL UNIQUE ,
-  titulo VARCHAR(255) NOT NULL ,
+  titulo VARCHAR(255)) COLLATE Latin1_General_CI_AS NOT NULL ,
   activa BIT NOT NULL ,
   propietario_fk INT NOT NULL ,
-  periodo NVARCHAR(45) NOT NULL ,
+  periodo NVARCHAR(45)) COLLATE Latin1_General_CI_AS NOT NULL ,
   PRIMARY KEY (id_pk) ,
   FOREIGN KEY (propietario_fk) REFERENCES Respondiente(id_pk)
 );
@@ -26,7 +26,7 @@ GO
 
 CREATE TABLE Aplicacion (
   id_pk INT NOT NULL IDENTITY ,
-  periodo NVARCHAR(45) NOT NULL ,
+  periodo NVARCHAR(45)) COLLATE Latin1_General_CI_AS NOT NULL ,
   fecha DATETIME NOT NULL ,
   respondiente_fk INT NOT NULL ,
   encuesta_fk VARCHAR(8) NOT NULL ,
@@ -45,7 +45,7 @@ GO
 
 CREATE TABLE Pregunta (
   id_pk INT NOT NULL IDENTITY ,
-  texto NVARCHAR(255) NOT NULL ,
+  texto NVARCHAR(255)) COLLATE Latin1_General_CI_AS NOT NULL ,
   encuesta_fk NVARCHAR(8) NOT NULL ,
   tipo_fk INT NOT NULL ,
   PRIMARY KEY (id_pk) ,
@@ -56,7 +56,7 @@ GO
 
 CREATE TABLE Pregunta_Respuesta (
   id_pk INT NOT NULL IDENTITY ,
-  respuesta NVARCHAR(255) NOT NULL ,
+  respuesta NVARCHAR(255)) COLLATE Latin1_General_CI_AS NOT NULL ,
   pregunta_fk INT NOT NULL ,
   PRIMARY KEY (id_pk) ,
   FOREIGN KEY (pregunta_fk) REFERENCES Pregunta(id_pk)
@@ -74,7 +74,7 @@ CREATE TABLE Respuesta_Seleccion (
 GO
 
 CREATE TABLE Respuesta_Abierta (
-  respuesta NVARCHAR(255) NOT NULL ,
+  respuesta NVARCHAR(255)) COLLATE Latin1_General_CI_AS NOT NULL ,
   pregunta_fk INT NOT NULL ,
   aplicacion_fk INT NOT NULL ,
   FOREIGN KEY (pregunta_fk) REFERENCES Pregunta(id_pk) ,
