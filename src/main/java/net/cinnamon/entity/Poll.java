@@ -21,10 +21,13 @@ public class Poll {
     public List<Question> questions = new ArrayList<>();
 
     public String create() {
+        if(title == null || term == null) return "";
         String out = PollImpl.createPoll(this.title, this.active, this.term, this.token);
         if(!out.isEmpty()) {
             this.token = out;
-            questions.forEach(p -> p.create(token));
+            if(questions != null && !questions.isEmpty()) {
+                questions.forEach(p -> p.create(token));
+            }
         }
         return token;
     }

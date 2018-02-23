@@ -12,6 +12,7 @@ public class Answer {
     public String text;
 
     public void create(int parent) {
+        if(text == null) return;
         int id = PollImpl.createAnswer(this.text, parent, this.id);
         if(id > 0) {
             this.id = id;

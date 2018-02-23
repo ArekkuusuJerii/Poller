@@ -19,10 +19,13 @@ public class Question {
     public List<Answer> answers = new ArrayList<>();
 
     public void create(String token) {
+        if(text == null || kind == null) return;
         int id = PollImpl.createQuestion(this.text, this.kind, token, this.id);
-        if(id > 0) {
-            this.id = id;
-            answers.forEach(r -> r.create(id));
+        if(answers != null && !answers.isEmpty()) {
+            if (id > 0) {
+                this.id = id;
+                answers.forEach(r -> r.create(id));
+            }
         }
     }
 
