@@ -45,8 +45,8 @@ package helper {
       alert.showAndWait()
     }
 
-    def showTextInput(text: String, input: String): Optional[String] = {
-      val dialog: TextInputDialog = new TextInputDialog("")
+    def showTextInput(text: String, input: String)(in: String): Optional[String] = {
+      val dialog: TextInputDialog = new TextInputDialog(in)
       StyleHelper.apply(dialog.getDialogPane, "css/modern_dark.css")
       dialog.setHeaderText(text)
       dialog.setContentText("Periodo")
@@ -142,8 +142,11 @@ package helper {
       stage.show()
     }
 
-    def openStatistic(window: Window, token: Token): Unit = {
-      val stage = StageLoader.load(classOf[StatisticController], "view/statistic.fxml")(s => s.setToken(token))
+    def openStatistic(window: Window, title: String, token: Token): Unit = {
+      val stage = StageLoader.load(classOf[StatisticController], "view/statistic.fxml")(s => {
+        s.setToken(token)
+        s.setTitle(title)
+      })
       stage.initModality(Modality.WINDOW_MODAL)
       stage.setTitle("Ver Encuesta")
       stage.initOwner(window)

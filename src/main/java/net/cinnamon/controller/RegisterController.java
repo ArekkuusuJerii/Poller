@@ -10,6 +10,8 @@ import net.cinnamon.helper.StringHelper;
 import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.RegisterImpl;
 
+import java.util.Locale;
+
 public class RegisterController implements IController {
 
     @FXML TextField tf_first_name;
@@ -65,7 +67,7 @@ public class RegisterController implements IController {
                                     boolean registered = RegisterImpl.register(
                                             tf_first_name.getText(),
                                             tf_second_name.getText(),
-                                            tf_email.getText(),
+                                            tf_email.getText().toLowerCase(Locale.ROOT),
                                             pf_password_0.getText()
                                     );
                                     if (registered) {

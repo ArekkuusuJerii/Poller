@@ -10,6 +10,7 @@ import net.cinnamon.helper.StringHelper;
 import net.cinnamon.helper.StyleHelper;
 import net.cinnamon.repository.LoginImpl;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public class LoginController implements IController {
@@ -42,7 +43,7 @@ public class LoginController implements IController {
 
     @FXML
     public void handleLoginEvent(MouseEvent event) {
-        LoginController.login(tf_email.getText(), pf_password.getText(), () -> {
+        LoginController.login(tf_email.getText().toLowerCase(Locale.ROOT), pf_password.getText(), () -> {
             tf_email.setText("");
             pf_password.setText("");
             hideWindow();

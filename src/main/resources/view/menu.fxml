@@ -13,36 +13,26 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="420.0" prefWidth="350.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.MenuController">
-    <GridPane prefHeight="420.0" prefWidth="350.0">
+<AnchorPane prefHeight="480.0" prefWidth="350.0" stylesheets="@../css/modern_dark.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.cinnamon.controller.MenuController">
+    <GridPane prefHeight="481.0" prefWidth="350.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="175.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="175.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="115.0" vgrow="SOMETIMES" />
-         <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="152.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="153.0" minHeight="10.0" prefHeight="153.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="115.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="68.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="157.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="186.0" minHeight="10.0" prefHeight="153.0" vgrow="SOMETIMES" />
         </rowConstraints>
-        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;">
-            <ImageView fitHeight="81.0" fitWidth="70.0" layoutX="53.0" layoutY="14.0" onMouseReleased="#logout" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
-            <effect>
-               <InnerShadow />
-            </effect>
-            <cursor>
-               <Cursor fx:constant="HAND" />
-            </cursor>
-            <image>
-               <Image url="@../img/logout.png" />
-            </image>
-            </ImageView>
-         <Label layoutX="47.0" layoutY="89.0" text="Cerrar Sesión">
+        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #161616; -fx-border-color: #666666;" GridPane.columnSpan="2" GridPane.rowIndex="1">
+         <Label fx:id="lb_user" alignment="CENTER" focusTraversable="false" layoutX="15.0" layoutY="19.0" prefHeight="27.0" prefWidth="321.0" style="-fx-background-color: black;" textAlignment="CENTER" wrapText="true">
             <font>
-               <Font size="14.0" />
+               <Font name="Consolas" size="14.0" />
             </font>
          </Label>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.rowIndex="2">
+        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.rowIndex="3">
             <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#handleVisualizeEvent" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
                 <Image url="@../img/statistic.png" />
             <effect>
@@ -58,18 +48,7 @@
             </font>
          </Label>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="205.0" style="-fx-border-color: white;" GridPane.columnIndex="1">
-            <Label layoutX="14.0" layoutY="79.0" text="CUENTA">
-                <font>
-                    <Font name="Consolas" size="18.0" />
-                </font>
-            </Label>
-            <Label fx:id="lb_user" alignment="CENTER" focusTraversable="false" layoutX="14.0" layoutY="23.0" prefHeight="35.0" prefWidth="146.0" style="-fx-background-color: black;" textAlignment="CENTER" wrapText="true">
-            <font>
-               <Font name="Consolas" size="12.0" />
-            </font></Label>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#handleCreateEvent" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
             <effect>
                <InnerShadow />
@@ -87,26 +66,26 @@
             </font>
          </Label>
         </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white; -fx-background-color: #161616;" GridPane.rowIndex="1">
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.rowIndex="2">
          <children>
-            <ImageView fitHeight="92.0" fitWidth="98.0" layoutX="42.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/poller.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor>
-            </ImageView>
-            <Label layoutX="48.0" layoutY="6.0" text="POLLER">
+               <ImageView fitHeight="106.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#logout" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
                <effect>
-                  <Bloom />
+                  <InnerShadow />
                </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <image>
+                  <Image url="@../img/logout.png" />
+               </image>
+               </ImageView>
+            <Label layoutX="47.0" layoutY="128.0" text="Cerrar Sesión">
                <font>
-                  <Font size="24.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
          </children></Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #262626;" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
             <ImageView fitHeight="123.0" fitWidth="106.0" layoutX="35.0" layoutY="14.0" onMouseReleased="#handleOpenEvent" pickOnBounds="true" preserveRatio="true" styleClass="image-hover">
                <image>
@@ -125,5 +104,17 @@
                </font>
             </Label>
          </children></Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: white;" GridPane.columnSpan="2">
+         <children>
+            <Label layoutX="92.0" layoutY="41.0" prefHeight="57.0" prefWidth="166.0" text="POLLER">
+               <effect>
+                  <Bloom />
+               </effect>
+               <font>
+                  <Font name="Consolas" size="48.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
     </GridPane>
 </AnchorPane>

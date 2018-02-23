@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import net.cinnamon.entity.Poll;
 import net.cinnamon.entity.Question;
@@ -13,15 +14,12 @@ import net.cinnamon.helper.AlertHelper;
 import net.cinnamon.helper.StageHelper;
 import net.cinnamon.repository.PollImpl;
 import net.cinnamon.repository.StatisticImpl;
-import scala.Tuple3;
 
 public class StatisticController implements IController {
 
     @FXML ScrollPane scroll_node;
     @FXML ChoiceBox<String> choice_box;
     @FXML TextField tf_title;
-    @FXML CheckBox cb_active;
-    private Poll poll = null;
     private String token;
 
     @Override
@@ -30,33 +28,6 @@ public class StatisticController implements IController {
             if (newValue != null && !newValue.isEmpty()) {
                 open(PollImpl.readPoll(token));
             } else clear();
-        });
-        tf_title.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(poll != null && !newValue) {
-                poll.title = tf_title.getText();
-                poll.overwrite();
-            }
-        });
-        tf_title.setOnAction(event -> {
-            if(poll != null) {
-                poll.title = tf_title.getText();
-                poll.overwrite();
-            }
-        });
-        cb_active.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(poll != null && poll.active != newValue) {
-                if (!newValue) {
-                    poll.active = newValue;
-                    poll.overwrite();
-                } else {
-                    AlertHelper.showTextInput("Introduce periodo", "Periodo").ifPresent(newTerm -> {
-                        poll.term = newTerm;
-                        poll.active = true;
-                        poll.overwrite();
-                    });
-                    cb_active.setSelected(poll.active);
-                }
-            }
         });
     }
 
@@ -69,18 +40,7 @@ public class StatisticController implements IController {
                     list.addAll(StatisticImpl.getTerms(token));
                     choice_box.setItems(list);
                     choice_box.setDisable(false);
-                    cb_active.setDisable(false);
-                    tf_title.setDisable(false);
-                    //Get Tuple data
-                    Tuple3<String, String, Boolean> tuple = StatisticImpl.getPollInfo(token);
-                    Poll poll = new Poll();
-                    poll.title = tuple._1();
-                    poll.term = tuple._2();
-                    poll.active = tuple._3();
-                    poll.token = token;
-                    tf_title.setText(poll.title);
-                    cb_active.setSelected(poll.active);
-                    this.poll = poll; //Keep here!
+                    this.token = token;
                 } else {
                     AlertHelper.showError("Esta encuesta no te pertenece").showAndWait();
                     clear();
@@ -89,8 +49,11 @@ public class StatisticController implements IController {
                 AlertHelper.showError("Este token no es válido").showAndWait();
                 clear();
             }
-            this.token = token;
         } else clear();
+    }
+
+    public void setTitle(String title) {
+        tf_title.setText(title);
     }
 
     private void clear() {
@@ -108,6 +71,11 @@ public class StatisticController implements IController {
         Platform.runLater(() -> {
             scroll_node.setVvalue(0);
         });
+    }
+
+    @FXML
+    public void handleCloseEvent(MouseEvent event) {
+        hideWindow();
     }
 
     @Override
